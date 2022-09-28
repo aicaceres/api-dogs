@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-export default function Article({ name, bredFor, temperament, image }) {
+export default function Article({ id, name, bredFor, temperament, image }) {
 
     const styles = {
     article: {

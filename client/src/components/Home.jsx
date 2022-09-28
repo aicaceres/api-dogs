@@ -1,7 +1,6 @@
 import React from 'react'
 import NavBar from './NavBar'
 import Articles from './Articles'
-import Paginator from './Paginator'
 import Sorting from './Sorting'
 
 const styles = {
@@ -20,8 +19,8 @@ export default function Home() {
                 <Sorting />
 				<section style={styles.layout}>
 
-					<Articles />
-					<Paginator />
+                    <Articles />
+
 				</section>
 			</>
 		);

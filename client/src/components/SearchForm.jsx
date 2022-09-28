@@ -30,7 +30,7 @@ export default function Search() {
 					<select>
 						<option> Select Temperament </option>
 						{temperaments.map( t => (
-							<option value={t.name}>{t.name}</option>
+							<option key={t.name} value={t.name}>{t.name}</option>
 						))}
 					</select>
 				</label>

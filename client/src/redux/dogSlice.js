@@ -9,14 +9,14 @@ const dogSlice = createSlice({
 	name: "dogs",
 	initialState,
 	reducers: {
-		loading(state) {
-			state.dogs = [];
-			state.loading = true;
+        loading(state) {
+            state.dogs = []
+			state.loading = true
 		},
 		setAllDogs(state, action) {
-			state.dogs = action.payload;
-			state.loading = false;
-		},
+			state.dogs = action.payload
+			state.loading = false
+		}
 	},
 });
 
