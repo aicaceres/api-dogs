@@ -1,0 +1,109 @@
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.search__input {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    color: #646464;
+    padding: 0.7rem 1rem;
+    border-radius: 30px 0 0 30px;
+    width: 14em;
+    transition: all ease-in-out .5s;
+    margin-right: -2rem;
+}
+
+.search__input:hover,
+.search__input:focus,
+.search__select select:hover,
+.search__select select:focus {
+    box-shadow: 0 0 0.5em #00000013;
+}
+
+.search__input:focus {
+    outline: none;
+    background-color: #f0eeee;
+}
+
+.search__input::-webkit-input-placeholder {
+    font-weight: 100;
+    color: #ccc;
+}
+
+.search__input:focus+.search__button {
+    background-color: #f0eeee;
+}
+
+.search__button {
+    border: none;
+    background-color: #f4f2f2;
+    margin-top: .1em;
+}
+
+.search__button:hover {
+    cursor: pointer;
+}
+
+.search__icon {
+    height: 1.3em;
+    width: 1.3em;
+    fill: #b4b4b4;
+}
+
+/** SELECT FOR FILTER **/
+.search__select {
+    position: relative;
+    float: left;
+    min-width: 200px;
+    margin: 8px;
+}
+
+/* remove default arrow in IE */
+select::-ms-expand {
+    display: none;
+}
+
+.search__select:after {
+    content: '>';
+    font: 24px "Consolas", monospace;
+    color: #b4b4b4;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    right: 12px;
+    /*Adjust for position however you want*/
+    top: 12px;
+    padding: 0 0 2px;
+    position: absolute;
+    pointer-events: none;
+}
+
+.search__select select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    scroll-behavior: smooth;
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: 44px;
+    float: right;
+    margin: 5px 0px;
+    padding: 0px 24px;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #888;
+    background-color: #f4f2f2;
+    background-image: none;
+    border: none;
+    -ms-word-break: normal;
+    word-break: normal;
+    border-radius: 0 30px 30px 0;
+}
