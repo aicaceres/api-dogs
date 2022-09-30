@@ -1,31 +1,39 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React from "react"
+import { Link } from "react-router-dom"
+import { useDispatch } from "react-redux"
 
-export default function Article({ id, name, bredFor, temperament, image }) {
+// reducer
+import { clearDetail, searchById } from "../redux/dogSlice"
 
-    const styles = {
-    article: {
+export default function Article({ id, name, bredFor, image }) {
+	const styles = {
+		article: {},
+		photo: {
+			backgroundImage: "url(" + image + ")",
+			backgroundSize: "cover",
+			backgroundPosition: "center",
+			width: "200px",
+			height: "200px",
+		},
+	}
 
-    },
-    photo: {
-        backgroundImage: 'url('+ image +')',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        width: '300px',
-        height: '300px'
-    }
-}
+	const dispatch = useDispatch()
 
-    return (
-			<article style={styles.article}>
-				<div>
-					<Link to="/detail">
-						<div style={styles.photo}></div>
+	const handleOnClick = (id) => {
+		dispatch(clearDetail())
+		dispatch(searchById(id))
+	}
 
-						<div>{name}</div>
-					</Link>
-                <div>{ bredFor }</div>
-				</div>
-			</article>
-		);
+	return (
+		<article style={styles.article}>
+			<div>
+				<Link to='/detail' onClick={() => handleOnClick(id)}>
+					<div style={styles.photo}></div>
+
+					<div>{name}</div>
+				</Link>
+				<div>{bredFor}</div>
+			</div>
+		</article>
+	)
 }

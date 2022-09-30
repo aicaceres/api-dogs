@@ -1,27 +1,28 @@
-import React from 'react'
-import NavBar from './NavBar'
-import Articles from './Articles'
-import Sorting from './Sorting'
+import React from "react"
+import NavBar from "./NavBar"
+import Articles from "./Articles"
+import Header from "./Header"
 
 const styles = {
-    layout: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems:'center'
-    }
+	layout: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+	},
 }
 
 export default function Home() {
-    return (
-			<>
-                <NavBar />
+	return (
+		<>
+			<NavBar />
 
-                <Sorting />
-				<section style={styles.layout}>
+            <section style={styles.layout}>
 
-                    <Articles />
+                <Header />
 
-				</section>
-			</>
-		);
+                <Articles />
+                
+			</section>
+		</>
+	)
 }

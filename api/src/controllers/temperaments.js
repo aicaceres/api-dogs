@@ -1,44 +1,42 @@
-const axios = require('axios')
-require('dotenv').config();
+const axios = require("axios")
+require("dotenv").config()
 const { URL_API } = process.env
 
-const { Temperament } = require('../db')
+const { Temperament } = require("../db")
 
 const getTemperamentData = async () => {
+	try {
+		// get temperaments from DB
+		const temperamentsDb = await Temperament.findAll()
 
-    try {
-        // get temperaments from DB
-		const temperamentsDb = await Temperament.findAll();
-
-        if (temperamentsDb.length) {
-            return temperamentsDb;
-
+		if (temperamentsDb.length) {
+			return [...temperamentsDb].sort()
 		} else {
 			// get temperaments from DOG API
-			const response = await axios.get(URL_API);
+			const { data } = await axios.get(URL_API)
 
-			var temperaments = [];
-			response.data.map((d) => {
+			var temperaments = []
+			data.map((d) => {
 				let temperament = d.hasOwnProperty("temperament")
-					? d.temperament.split(/\s*(?:,|$)\s*/)
-					: [];
-				temperaments = [...temperaments, ...temperament];
-			});
+					? d.temperament.split(",")
+					: []
+				const trimmed = temperament.map((t) => t.trim())
+				temperaments = [...temperaments, ...trimmed]
+			})
 
-			const tempSet = new Set([...temperaments]);
-
-			const sorted = [...tempSet].sort();
+			const tempSet = new Set([...temperaments])
+			const sorted = [...tempSet].sort()
 
 			const bulk = sorted.map((t, i) => {
-				return { name: t };
-			});
+				return { name: t }
+			})
 
-			const temperamentsInserted = await Temperament.bulkCreate(bulk);
-			return temperamentsInserted;
+			const temperamentsInserted = await Temperament.bulkCreate(bulk)
+			return temperamentsInserted
 		}
 	} catch (error) {
-		return error;
+		return error
 	}
-};
+}
 
 module.exports = { getTemperamentData }

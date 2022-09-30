@@ -1,13 +1,31 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import NavBar from './NavBar'
+import React from "react"
+import { Link } from "react-router-dom"
+import NavBar from "./NavBar"
+import Loading from "./Loading"
+
+import { useSelector } from "react-redux"
+
+const styles = {
+	layout: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+	},
+}
 
 export default function ArticleDetail() {
-  return (
-      <div>
-          <NavBar/>
-          <h1>Article Detail</h1>
-            <Link to='/breeds'> Return </Link>
-      </div>
-  )
+	const { detail: dog, loading } = useSelector((state) => state.dogs)
+
+	return (
+		<div>
+			<NavBar />
+
+			<div style={styles.layout}>
+				{loading ? <Loading /> : ""}
+				<h1>{dog.name}</h1>
+				<img alt={dog.name} src={dog.image} loading='lazy' />
+				<Link to='/breeds'> Return </Link>
+			</div>
+		</div>
+	)
 }

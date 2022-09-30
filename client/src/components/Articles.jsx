@@ -10,38 +10,39 @@ const styles = {
 		width: "80%",
 		display: "flex",
 		flexWrap: "wrap",
-		rowGap: "4rem",
 		gap: "3rem",
 	},
-};
+}
 
 export default function Articles() {
-	const dispatch = useDispatch();
-	const { dogs, loading } = useSelector((state) => state.dogs);
+	const dispatch = useDispatch()
+	const { list, filtered: dogs, loading } = useSelector((state) => state.dogs)
 
-    useEffect(() => {
-    	dispatch(fetchAllDogs());
-	}, [dispatch]);
-
+	useEffect(() => {
+		if (!list.length) {
+			dispatch(fetchAllDogs())
+		}
+	}, [dispatch, list])
 	return (
 		<>
-			{ loading ? <Loading /> : ""}
-            <div style={styles.articles}>
-
-                {!dogs ? (
-
-                    <h1>vacio</h1>
-
+			<div style={styles.articles}>
+				{loading ? (
+					<Loading />
+				) : !dogs.length ? (
+					<div style={{ width: "100%", textAlign: "center" }}>
+						<img
+							alt='sin datos'
+							src='/assets/loading-smell.gif'
+							style={{ width: "400px" }}
+						/>
+					</div>
 				) : (
-
-                    dogs.map((dog, i) => {
-						if (i < 98) return <Article key={dog.id} {...dog} />;
-                        else return false;
-                    })
-
-                )}
-
+					dogs.map((dog, i) => {
+						if (i < 8) return <Article key={dog.id} {...dog} />
+						else return false
+					})
+				)}
 			</div>
 		</>
-	);
+	)
 }
