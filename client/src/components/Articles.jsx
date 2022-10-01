@@ -18,11 +18,7 @@ const styles = {
 export default function Articles() {
 	const dispatch = useDispatch()
 	const { list, filtered: dogs, loading } = useSelector((state) => state.dogs)
-	useEffect(() => {
-		if (!list.length) {
-			dispatch(fetchAllDogs())
-		}
-	}, [dispatch, list])
+
 
 	// pagination
 	const countPerPage = 8
@@ -30,6 +26,13 @@ export default function Articles() {
 	const firstIdx = (currentPage - 1) * countPerPage
 	const lastIdx = firstIdx + countPerPage
 	const page = dogs.slice(firstIdx, lastIdx)
+
+    useEffect(() => {
+         setCurrentPage(1)
+		if (!list.length) {
+			dispatch(fetchAllDogs())
+		}
+    }, [dispatch, list])
 
 	return (
 		<>
