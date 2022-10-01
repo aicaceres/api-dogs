@@ -1,9 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Article from "./Article"
 import Loading from "./Loading"
 // redux
 import { fetchAllDogs } from "../redux/dogSlice"
 import { useDispatch, useSelector } from "react-redux"
+import Pagination from "./Pagination"
 
 const styles = {
 	articles: {
@@ -17,12 +18,19 @@ const styles = {
 export default function Articles() {
 	const dispatch = useDispatch()
 	const { list, filtered: dogs, loading } = useSelector((state) => state.dogs)
-
 	useEffect(() => {
 		if (!list.length) {
 			dispatch(fetchAllDogs())
 		}
 	}, [dispatch, list])
+
+	// pagination
+	const countPerPage = 8
+	const [currentPage, setCurrentPage] = useState(1)
+	const firstIdx = (currentPage - 1) * countPerPage
+	const lastIdx = firstIdx + countPerPage
+	const page = dogs.slice(firstIdx, lastIdx)
+
 	return (
 		<>
 			<div style={styles.articles}>
@@ -36,12 +44,20 @@ export default function Articles() {
 							style={{ width: "400px" }}
 						/>
 					</div>
-				) : (
-					dogs.map((dog, i) => {
-						if (i < 8) return <Article key={dog.id} {...dog} />
-						else return false
-					})
-				)}
+                    ) : (
+                        <>
+                            <Pagination
+                                handleChange={(pageNumber) => setCurrentPage(pageNumber)}
+                                totalArticles={dogs.length}
+                                currentPage={currentPage}
+                                countPerPage={countPerPage}
+                            />
+
+                            {page.map((dog) => (
+                                <Article key={dog.id} {...dog} />
+                            ))}
+                        </>
+                    )}
 			</div>
 		</>
 	)
