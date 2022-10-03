@@ -2,6 +2,10 @@ import React from "react"
 import SearchForm from "./SearchForm"
 import { Link } from "react-router-dom"
 import Logo from "./Logo"
+//redux
+import { clearDogs } from "../redux/dogSlice"
+import { clearTemperaments } from "../redux/temperamentSlice"
+import { useDispatch } from "react-redux"
 
 const styles = {
 	navbar: {
@@ -21,6 +25,13 @@ const styles = {
 }
 
 function NavBar() {
+
+    const dispatch = useDispatch()
+    const handleClearAll = () => {
+        dispatch(clearTemperaments())
+        dispatch(clearDogs())
+    }
+
 	return (
 		<header>
 			<nav style={styles.navbar}>
@@ -32,7 +43,7 @@ function NavBar() {
 					Create your Breed
 				</Link>
 
-				<Link to='/' style={styles.close}>
+				<Link to='/' onClick={ handleClearAll } style={styles.close}>
 					LandingPage
 				</Link>
 			</nav>
