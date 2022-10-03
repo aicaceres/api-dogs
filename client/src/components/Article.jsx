@@ -1,9 +1,5 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { useDispatch } from "react-redux"
-
-// reducer
-import { clearDetail, searchById } from "../redux/dogSlice"
 
 export default function Article({ id, name, bredFor, image }) {
 	const styles = {
@@ -17,19 +13,11 @@ export default function Article({ id, name, bredFor, image }) {
 		},
 	}
 
-	const dispatch = useDispatch()
-
-	const handleOnClick = (id) => {
-		dispatch(clearDetail())
-		dispatch(searchById(id))
-	}
-
 	return (
 		<article style={styles.article}>
 			<div>
-				<Link to='/detail' onClick={() => handleOnClick(id)}>
+				<Link to={`/detail/${id}`} >
 					<div style={styles.photo}></div>
-
 					<div>{name}</div>
 				</Link>
 				<div>{bredFor}</div>

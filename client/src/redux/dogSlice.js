@@ -36,9 +36,6 @@ const dogSlice = createSlice({
 			state.detail = action.payload
 			state.loading = false
 		},
-		clearDetail(state) {
-			state.detail = {}
-		},
 		getBySource(state, action) {
 			state.source = action.payload
 
@@ -82,12 +79,14 @@ const dogSlice = createSlice({
             state.loading = false
             // reset order
             state.order = initialOrder
+        },
+   		clearDetail(state) {
+			state.detail = {}
 		},
 		clearFiltered(state) {
 			state.filtered = []
-			state.loading = true
 		},
-		clearDogs(state) {
+		clearDogs() {
 			return {
 				...initialState,
 			}
@@ -98,6 +97,7 @@ const dogSlice = createSlice({
 export const getByTemperament = (selected) => {
 	return (dispatch) => {
 		dispatch(clearFiltered())
+		dispatch(setLoading())
 		fetch("http://localhost:3001/dogs")
 			.then((res) => res.json())
 			.then((json) => {

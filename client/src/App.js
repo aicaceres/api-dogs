@@ -18,7 +18,7 @@ function App() {
         <Route exact path='/newBreed'>
             <CreateForm/>
         </Route>
-        <Route exact path='/detail'>
+        <Route exact path='/detail/:id'>
             <ArticleDetail/>
         </Route>
     </>
