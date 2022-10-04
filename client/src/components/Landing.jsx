@@ -1,43 +1,40 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Link } from "react-router-dom"
-import "./Landing.css"
+import styled from "styled-components"
 
-// redux
-// import { clearDogs } from "../redux/dogSlice"
-// import { clearTemperaments } from "../redux/temperamentSlice"
-// import { useDispatch } from "react-redux"
+const LandingContainer = styled.div`
+	background-image: url("../../assets/landing.avif");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 100vh;
+	position: relative;
+`
+const Intro = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: #ffffff;
+	& a {
+		text-decoration: none;
+		font-weight: 700;
+		& span {
+			color: #ffffff;
+			font-size: 25px;
+		}
+	}
+`
 
 export default function Landing() {
-	// const dispatch = useDispatch()
-
-	// useEffect(() => {
-	// 	dispatch(clearDogs())
-	// 	dispatch(clearTemperaments())
-	// }, [dispatch])
 	return (
-		<div className='landing'>
-			<div className='intro'>
+		<LandingContainer>
+			<Intro>
 				<h1>Dogs Breeds</h1>
-				<Link
-					to='/breeds'
-					style={{
-						textDecoration: "none",
-						fontWeight: "700",
-					}}
-				>
-					<span
-						style={{
-							position: "relative",
-							top: "-8px",
-							padding: "10px",
-							color: "white",
-							fontSize: "25px",
-						}}
-					>
-						START
-					</span>
+
+				<Link to='/breeds'>
+					<span>START</span>
 				</Link>
-			</div>
-		</div>
+			</Intro>
+		</LandingContainer>
 	)
 }

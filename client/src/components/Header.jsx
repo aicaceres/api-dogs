@@ -1,18 +1,16 @@
 import React from 'react'
-import './Header.css'
+import styled from 'styled-components'
 
 // redux
 import { getBySource, setOrder } from "../redux/dogSlice"
 import { useDispatch, useSelector } from "react-redux"
 
-const styles = {
-	header: {
-		width: "80%",
-		display: "flex",
-		flexWrap: "wrap",
-		gap: "3rem",
-	},
-}
+const HeaderContainer = styled.div`
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    gap:3rem;
+`
 const orderTitle = {
     ALPHABETIC: {
         ASC: 'A-Z',
@@ -39,7 +37,7 @@ export default function Header() {
     }
 
   return (
-		<header style={styles.header}>
+		<HeaderContainer>
 			<div>
 				<h1>Dogs</h1>
 			</div>
@@ -91,6 +89,6 @@ export default function Header() {
 					{orderTitle["WEIGHT"][order["WEIGHT"]]}
 				</button>
 			</div>
-		</header>
+		</HeaderContainer>
 	)
 }

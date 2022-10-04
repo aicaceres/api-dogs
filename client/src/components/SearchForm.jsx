@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import "./SearchForm.css"
+import "../styles/SearchForm.css"
 
 // reducers
 import { setSelected, fetchAllTemperaments } from "../redux/temperamentSlice"
