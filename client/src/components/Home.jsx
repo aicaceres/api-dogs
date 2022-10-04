@@ -1,6 +1,6 @@
 import React from "react"
 import NavBar from "./NavBar"
-import Articles from "./Articles"
+import Items from "./Items"
 import Header from "./Header"
 
 const styles = {
@@ -20,8 +20,8 @@ export default function Home() {
 
                 <Header />
 
-                <Articles />
-                
+                <Items />
+
 			</section>
 		</>
 	)

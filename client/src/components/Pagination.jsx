@@ -1,13 +1,13 @@
-import React, { useMemo } from "react"
+import React from "react"
 
 export default function Pagination({
 	handleChange,
-	totalArticles,
+	totalItems,
 	currentPage,
 	countPerPage,
 }) {
 	// count of pages = total of dogs / count of dogs per page
-	const pagesCount = Math.ceil(totalArticles / countPerPage)
+	const pagesCount = Math.ceil(totalItems / countPerPage)
 
 	// si tengo una sola pagina no renderiza nada
 	if (pagesCount === 1) return null

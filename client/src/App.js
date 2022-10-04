@@ -2,8 +2,8 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import Home from './components/Home'
 import Landing from './components/Landing'
-import CreateForm from './components/CreateArticle'
-import ArticleDetail from './components/ArticleDetail';
+import CreateForm from './components/CreateNew'
+import Detail from './components/Detail';
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
             <CreateForm/>
         </Route>
         <Route exact path='/detail/:id'>
-            <ArticleDetail/>
+            <Detail/>
         </Route>
     </>
   );
