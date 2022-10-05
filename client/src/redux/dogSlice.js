@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import axios from 'axios'
 
 // order: {
 // 		type: "ALPHABETIC | WEIGHT"
@@ -16,6 +17,7 @@ const initialState = {
 	filtered: [],
 	order: initialOrder,
 	source: "ALL",
+    currentPage: 1,
 	detail: {},
 	loading: true,
 }
@@ -27,25 +29,37 @@ const dogSlice = createSlice({
 		setLoading(state) {
 			state.loading = true
 		},
+		setCurrentPage(state,action) {
+			state.currentPage = action.payload
+		},
 		setAllDogs(state, action) {
 			state.list = action.payload
-			state.filtered = action.payload
+            state.filtered = action.payload
+            state.currentPage = 1
 			state.loading = false
-		},
+        },
+        setFilteredDogs(state, action) {
+			state.filtered = action.payload
+            state.loading = false
+            // reset order and pagination
+            state.order = initialOrder
+            state.currentPage = 1
+        },
 		setDetail(state, action) {
 			state.detail = action.payload
 			state.loading = false
 		},
 		getBySource(state, action) {
 			state.source = action.payload
-
+            // apply source filter
 			if (action.payload === "ALL") {
 				state.filtered = state.list
 			} else {
 				state.filtered = state.list.filter((f) => f.source === state.source)
             }
-            // reset order
+            // reset order and pagination
             state.order = initialOrder
+            state.currentPage = 1
         },
         setOrder(state,action) {
             const params = action.payload
@@ -55,8 +69,8 @@ const dogSlice = createSlice({
 					? [...state.filtered].sort((a, b) => (a[field] > b[field] ? 1 : -1))
                     : [...state.filtered].sort((a, b) => (b[field] > a[field] ? 1 : -1))
             const newOrder = {
-                ALPHABETIC: params.type === 'ALPHABETIC' ? params.direction : 'ASC' ,
-		        WEIGHT: params.type === 'WEIGHT' ? params.direction : 'ASC',
+                ALPHABETIC: params.type === 'ALPHABETIC' ? params.direction : 'ASC',
+                WEIGHT: params.type === 'WEIGHT' ? params.direction : 'ASC',
             }
 			return {
                 ...state,
@@ -71,20 +85,18 @@ const dogSlice = createSlice({
 					? action.payload
                     : action.payload.filter((f) => f.source === state.source)
             state.loading = false
-            // reset order
+            // reset order and pagination
             state.order = initialOrder
-		},
-		setFilteredDogs(state, action) {
-			state.filtered = action.payload
-            state.loading = false
-            // reset order
-            state.order = initialOrder
+            state.currentPage = 1
         },
    		clearDetail(state) {
 			state.detail = {}
 		},
 		clearFiltered(state) {
-			state.filtered = []
+            state.filtered = []
+            // reset order and pagination
+            state.order = initialOrder
+            state.currentPage = 1
 		},
 		clearDogs() {
 			return {
@@ -94,58 +106,77 @@ const dogSlice = createSlice({
 	},
 })
 
-// en source
-
-export const getByTemperament = (selected) => {
-	return (dispatch) => {
-		dispatch(clearFiltered())
-		dispatch(setLoading())
-		fetch("http://localhost:3001/dogs")
-			.then((res) => res.json())
-			.then((json) => {
-				const filtered =
-					selected === "0"
-						? json
-						: json.filter((d) => d.temperament.includes(selected))
-				dispatch(setFilteredDogs(filtered))
-			})
-			.catch((e) => console.log(e))
-	}
-}
-
+// load all dogs from API and database
 export const fetchAllDogs = () => {
-	return (dispatch) => {
-		dispatch(setLoading())
-		fetch("http://localhost:3001/dogs")
-			.then((res) => res.json())
-			.then((json) => {
-				dispatch(setAllDogs(json))
-			})
-			.catch((e) => console.log(e))
+    return async (dispatch) => {
+        try {
+            dispatch(setLoading())
+            const { data } = await axios.get("http://localhost:3001/dogs")
+            await dispatch(setAllDogs(data))
+        } catch (error) {
+            console.error('fetchAllDogs:',error)
+        }
 	}
 }
-
+// search by Id and fill detail
 export const searchById = (id) => {
-	return (dispatch) => {
-		dispatch(setLoading())
-		fetch(`http://localhost:3001/dogs/${id}`)
-			.then((res) => res.json())
-			.then((detail) => dispatch(setDetail(detail)))
-			.catch((e) => console.log(e))
+	return async (dispatch) => {
+		try {
+			dispatch(setLoading())
+			const { data } = await axios.get(`http://localhost:3001/dogs/${id}`)
+			dispatch(setDetail(data))
+		} catch (error) {
+			console.error("searchById:", error)
+		}
 	}
 }
+// search by name
 export const searchByName = (name) => {
-    return (dispatch) => {
-        dispatch(setLoading())
-		fetch(`http://localhost:3001/dogs?name=${name}`)
-			.then((res) => res.json())
-			.then((json) => dispatch(setByName(json)))
-			.catch((e) => console.log(e))
+	return async (dispatch) => {
+		try {
+			dispatch(setLoading())
+			const { data } = await axios.get(
+				`http://localhost:3001/dogs?name=${name}`
+			)
+			dispatch(setByName(data))
+		} catch (error) {
+			console.error("searchByName: ", error)
+		}
+	}
+}
+// filter by Temperament
+export const getByTemperament = (selected) => {
+	return async (dispatch) => {
+		try {
+			dispatch(clearFiltered())
+			dispatch(setLoading())
+			const { data } = await axios.get("http://localhost:3001/dogs")
+			const filtered =
+				await selected === "0"
+					? data
+					: data.filter((d) => d.temperament.includes(selected))
+			dispatch(setFilteredDogs(filtered))
+		} catch (error) {
+			console.error('getByTemperament:',error)
+		}
+	}
+}
+// create new breed
+export const postNewBreed = (formData) => {
+	return async (dispatch) => {
+		try {
+            await axios.post("http://localhost:3001/dogs", formData)
+            const { data } = await axios.get("http://localhost:3001/dogs")
+            await dispatch(setAllDogs(data))
+		} catch (error) {
+			console.error("postNewBreed:", error)
+		}
 	}
 }
 
 export const {
-	setLoading,
+    setLoading,
+    setCurrentPage,
 	setAllDogs,
 	setDetail,
 	clearDetail,

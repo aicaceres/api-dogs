@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Item from "./Item"
 import Loading from "./Loading"
 // redux
-import { fetchAllDogs } from "../redux/dogSlice"
+import { fetchAllDogs, setCurrentPage } from "../redux/dogSlice"
 import { useDispatch, useSelector } from "react-redux"
 import Pagination from "./Pagination"
 
@@ -17,22 +17,23 @@ const styles = {
 
 export default function Items() {
 	const dispatch = useDispatch()
-	const { list, filtered: dogs, loading } = useSelector((state) => state.dogs)
-
+	const { list, filtered: dogs, currentPage, loading } = useSelector((state) => state.dogs)
 
 	// pagination
 	const countPerPage = 8
-	const [currentPage, setCurrentPage] = useState(1)
 	const firstIdx = (currentPage - 1) * countPerPage
 	const lastIdx = firstIdx + countPerPage
 	const page = dogs.slice(firstIdx, lastIdx)
 
     useEffect(() => {
-         setCurrentPage(1)
 		if (!list.length) {
 			dispatch(fetchAllDogs())
-		}
+        }
     }, [dispatch, list])
+
+    const handlePageChange = (pageNumber) => {
+        dispatch(setCurrentPage(pageNumber))
+    }
 
 	return (
 		<>
@@ -49,16 +50,16 @@ export default function Items() {
 					</div>
                     ) : (
                         <>
+                            {page.map((dog) => (
+                                <Item key={dog.id} {...dog} />
+                            ))}
+
                             <Pagination
-                                handleChange={(pageNumber) => setCurrentPage(pageNumber)}
+                                handleChange={ handlePageChange }
                                 totalItems={dogs.length}
                                 currentPage={currentPage}
                                 countPerPage={countPerPage}
                             />
-
-                            {page.map((dog) => (
-                                <Item key={dog.id} {...dog} />
-                            ))}
                         </>
                     )}
 			</div>

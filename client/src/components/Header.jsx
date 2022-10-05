@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 // redux
-import { getBySource, setOrder } from "../redux/dogSlice"
+import { getBySource, setOrder, clearFiltered } from "../redux/dogSlice"
 import { useDispatch, useSelector } from "react-redux"
 
 const HeaderContainer = styled.div`
@@ -27,8 +27,8 @@ export default function Header() {
     const { source } = useSelector(state => state.dogs)
     const { order } = useSelector(state => state.dogs)
 
-    const handleOrder = (e) => {
-        const { name:type, value:direction } = e.target
+    const handleOrder = ({target}) => {
+        const { name:type, value:direction } = target
         dispatch(setOrder({ type, direction }))
     }
 

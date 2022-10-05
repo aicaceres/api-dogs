@@ -32,7 +32,6 @@ server.get("/:idRaza", async (req, res) => {
 server.post("/", async (req, res) => {
 	try {
 		const response = await addNewBreed(req.body)
-		console.log(response)
 		res.status(200).send(response)
 	} catch (error) {
 		res.status(400).send({ error: error.message })

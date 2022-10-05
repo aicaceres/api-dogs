@@ -12,8 +12,8 @@ export default function Search() {
     const selected = useSelector((state) => state.temperaments.selected)
     // search input
     const [input, setInput] = useState('')
-    const handleInput = (e) => {
-        setInput(e.target.value)
+    const handleInput = ({target}) => {
+        setInput(target.value)
     }
     const handleSearch = (e) => {
         e.preventDefault()
@@ -22,14 +22,14 @@ export default function Search() {
     }
 
     // select temperaments
-	const options = temperaments
+	const options = temperaments.length
 		? temperaments.map((t) => {
 				return { label: t.name, value: t.name }
 		  })
 		: []
-	const selectHandleOnChange = (e) => {
-		dispatch(setSelected(e.target.value))
-		dispatch(getByTemperament(e.target.value))
+	const selectHandleOnChange = ({target}) => {
+		dispatch(setSelected(target.value))
+		dispatch(getByTemperament(target.value))
 	}
 
 	useEffect(() => {

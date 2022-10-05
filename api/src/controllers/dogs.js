@@ -1,34 +1,39 @@
 const axios = require("axios")
 require("dotenv").config()
-const { URL_API } = process.env
+const { URL_API, URL_PHOTO_API } = process.env
 
 const { Dog, Temperament } = require("../db")
 
 // Get data from the API
 const getApiData = async () => {
-	const { data } = await axios.get(URL_API)
+	try {
+		const { data } = await axios.get(URL_API)
 
-	return await data.map((d) => {
-		let [weightMin, weightMax] = d.weight.metric.split("-")
-		let [heightMin, heightMax] = d.height.metric.split("-")
-		let temperament = d.hasOwnProperty("temperament")
-			? d.temperament.split(/\s*(?:,|$)\s*/)
-			: ""
-		result = {
-			id: d.id,
-			name: d.name,
-			weightMin: Number(weightMin),
-			weightMax: Number(weightMax),
-			heightMin: Number(heightMin),
-			heightMax: Number(heightMax),
-			temperament: temperament,
-			lifeSpan: d.life_span,
-			bredFor: d.bred_for,
-			image: d.image.url,
-			source: "API",
-		}
-		return result
-	})
+		return await data.map((d) => {
+			let [weightMin, weightMax] = d.weight.metric.split("-")
+			let [heightMin, heightMax] = d.height.metric.split("-")
+			let temperament = d.hasOwnProperty("temperament")
+				? d.temperament.split(/\s*(?:,|$)\s*/)
+				: ""
+			result = {
+				id: d.id,
+				name: d.name,
+				weightMin: Number(weightMin),
+				weightMax: Number(weightMax),
+				heightMin: Number(heightMin),
+				heightMax: Number(heightMax),
+				temperament: temperament,
+				lifeSpan: d.life_span,
+				bredFor: d.bred_for,
+				image: d.image.url,
+				source: "API",
+			}
+			return result
+		})
+	} catch (error) {
+		console.error("getApiData: ", error)
+		return error
+	}
 }
 
 // Get Data from database
@@ -46,7 +51,7 @@ const getDbData = async () => {
 		if (dogs.length) {
 			// format record like API
 			const dbData = await dogs.map((d) => {
-				const tempArray = d.temperaments.map((t) => t.name)
+				const tempArray = d.temperaments.map( t => t.name)
 				field = d.dataValues
 				data = {
 					id: field.id,
@@ -68,6 +73,7 @@ const getDbData = async () => {
 			return []
 		}
 	} catch (error) {
+		console.error("getDbData: ", error)
 		return error
 	}
 }
@@ -78,7 +84,7 @@ const getAllData = async (name) => {
 	const db = await getDbData()
 
 	const all = [...api, ...db]
-
+    // if filter by name is required
 	return name
 		? all.filter((d) => {
 				return d.name.toLowerCase().search(name.toLowerCase()) >= 0
@@ -88,9 +94,14 @@ const getAllData = async (name) => {
 
 // Get data by idRaza
 const getByIdRaza = async (idRaza) => {
-	const data = await getAllData()
-	const dog = data.find((d) => d.id.toString() === idRaza.toString())
-	return dog || {}
+    try {
+        const data = await getAllData()
+	    const dog = data.find((d) => d.id.toString() === idRaza.toString())
+	    return dog || {}
+    } catch (error) {
+        console.error("getByIdRaza: ", error)
+		return error
+    }
 }
 
 // Create new breed
@@ -101,23 +112,43 @@ const addNewBreed = async ({
 	weightMin,
 	weightMax,
 	lifeSpan,
+	image,
 	bredFor,
+	temperaments,
 }) => {
-	const { data } = await axios.get("https://dog.ceo/api/breeds/image/random")
+	try {
+		if (!image) {
+			const { data } = await axios.get(URL_PHOTO_API)
+			image = data.message
+		}
+        // create new breed
+		const newDog = await Dog.create({
+			name,
+			heightMin,
+			heightMax,
+			weightMin,
+			weightMax,
+			lifeSpan,
+			bredFor,
+			image,
+		})
+		// add temperaments to newDog
+		temperaments.length
+			? temperaments.map(async (name) => {
+					const temp = await Temperament.findOne({
+						attributes: ["id"],
+						where: { name: name },
+					})
+					await newDog.addTemperament(temp.id)
+			  })
+			: []
 
-	const dog = await Dog.create({
-		name,
-		heightMin,
-		heightMax,
-		weightMin,
-		weightMax,
-		lifeSpan,
-		bredFor,
-		image: data.message,
-	})
-	// add temperaments
+        return newDog
 
-	return dog
+	} catch (error) {
+        console.error("addNewBreed: ", error)
+        return error
+	}
 }
 
 module.exports = { getApiData, getDbData, getAllData, getByIdRaza, addNewBreed }

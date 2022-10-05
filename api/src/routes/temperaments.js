@@ -9,7 +9,8 @@ server.get("/", async (req, res, next) => {
 		const temperamentData = await getTemperamentData()
 		res.send(temperamentData)
 	} catch (error) {
-		next(error)
+		//next(error)
+        
 	}
 })
 

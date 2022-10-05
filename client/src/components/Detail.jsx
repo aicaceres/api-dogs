@@ -36,6 +36,8 @@ export default function Detail() {
 			<div style={styles.layout}>
                 {loading ? <Loading /> : ""}
                 <h1>{dog.name}</h1>
+                { dog.temperament && dog.temperament.map(t => <span key={t}>{ t }</span>)}
+
                 <button onClick={ () => history.push('/breeds') } > Return </button>
 				<img alt={dog.name} src={dog.image} loading='lazy' />
 			</div>

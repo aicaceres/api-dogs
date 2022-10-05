@@ -1,4 +1,5 @@
 import React from "react"
+import PaginationContainer from "../styles/PaginationContainer"
 
 export default function Pagination({
 	handleChange,
@@ -6,71 +7,76 @@ export default function Pagination({
 	currentPage,
 	countPerPage,
 }) {
-	// count of pages = total of dogs / count of dogs per page
 	const pagesCount = Math.ceil(totalItems / countPerPage)
 
-	// si tengo una sola pagina no renderiza nada
 	if (pagesCount === 1) return null
-
-	// control de botones next y previous
-	const handlePrevious = () => handleChange(currentPage - 1)
-	const handleNext = () => handleChange(currentPage + 1)
 
 	// range of numbers
 	let firstNumber = 1
 	let lastNumber = 1
-	// adicional numbers at the left and the right
+	// adicional numbers at the left and the right of currentpage
 	const adicionalNumbers = 2
 	// total of numbers in the pagination bar
-	const countOfNumbers = adicionalNumbers + 5
+	let countOfNumbers = adicionalNumbers * 2 + 1
 
 	if (countOfNumbers >= pagesCount) {
-		firstNumber = 1
-		lastNumber = pagesCount
+		countOfNumbers = pagesCount
 	} else {
 		firstNumber = Math.max(currentPage - adicionalNumbers, 1)
 		lastNumber = Math.min(currentPage + adicionalNumbers, pagesCount)
-		// pagination bar completion
-		const difference = lastNumber - firstNumber
-		if (difference < adicionalNumbers * 2) {
-			firstNumber === 1
-				? (lastNumber += adicionalNumbers * 2 - difference)
-				: (firstNumber -= Math.abs(difference - adicionalNumbers * 2))
-		}
+		// complete the pagination bar in the end
+        if (lastNumber === pagesCount) {
+            firstNumber += lastNumber - firstNumber - adicionalNumbers * 2
+        }
 	}
 	// make the page numbers with the range
-	const pageNumbers = []
-	for (let i = firstNumber; i <= lastNumber; i++) {
-		pageNumbers.push(i)
-	}
+	const pageNumbers = new Array(countOfNumbers)
+		.fill()
+		.map((d, i) => i + firstNumber)
 
 	return (
-		<div>
-			<ul>
-				<li>
-					<button onClick={handlePrevious} disabled={currentPage === 1}>
-						prev
-					</button>
-				</li>
-				{pageNumbers.map((number) => {
-					return (
-						<li key={number}>
-							<button
-								style={{ color: currentPage === number ? "red" : "blue" }}
-								onClick={() => handleChange(number)}
-							>
-								{number}
-							</button>
-						</li>
-					)
-				})}
+		<PaginationContainer>
+			<li
+				onClick={() => handleChange(1)}
+				className={currentPage === 1 ? "disabled" : ""}
+				title='First Page'
+			>
+				<div className='arrow double left' />
+			</li>
+			<li
+				onClick={() => handleChange(currentPage - 1)}
+				className={currentPage === 1 ? "disabled" : ""}
+				title='Previous'
+			>
+				<div className='arrow left' />
+			</li>
 
-				<li>
-					<button onClick={handleNext} disabled={pagesCount === currentPage}>
-                        next
-                    </button>
-				</li>
-			</ul>
-		</div>
+			{pageNumbers.map((number) => {
+				return (
+					<li
+						key={number}
+						className={currentPage === number ? "selected" : ""}
+						onClick={() => handleChange(number)}
+					>
+						{number}
+					</li>
+				)
+			})}
+
+			<li
+				onClick={() => handleChange(currentPage + 1)}
+				className={pagesCount === currentPage ? "disabled" : ""}
+				title='Next'
+			>
+				<div className='arrow right' />
+			</li>
+			<li
+				onClick={() => handleChange(pagesCount)}
+				className={pagesCount === currentPage ? "disabled" : ""}
+				title='Last Page'
+			>
+				<div className='arrow double right' />
+			</li>
+		</PaginationContainer>
 	)
 }

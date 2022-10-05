@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import axios from 'axios'
 
 const initialState = {
 	list: [],
@@ -24,13 +25,13 @@ const temperamentSlice = createSlice({
 })
 
 export const fetchAllTemperaments = () => {
-	return (dispatch) => {
-		fetch("http://localhost:3001/temperaments")
-			.then((res) => res.json())
-			.then((json) => {
-				dispatch(setAllTemperaments(json))
-			})
-			.catch((e) => console.log(e))
+    return async (dispatch) => {
+        try {
+            const { data } = await axios.get("http://localhost:3001/temperaments")
+            dispatch(setAllTemperaments(data))
+        } catch (error) {
+            console.log(error)
+        }
 	}
 }
 

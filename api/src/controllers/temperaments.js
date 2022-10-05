@@ -5,7 +5,7 @@ const { URL_API } = process.env
 const { Temperament } = require("../db")
 
 const getTemperamentData = async () => {
-	try {
+    try {
 		// get temperaments from DB
 		const temperamentsDb = await Temperament.findAll()
 
@@ -34,7 +34,8 @@ const getTemperamentData = async () => {
 			const temperamentsInserted = await Temperament.bulkCreate(bulk)
 			return temperamentsInserted
 		}
-	} catch (error) {
+    } catch (error) {
+        console.error('getTemperamentData: ', error)
 		return error
 	}
 }
