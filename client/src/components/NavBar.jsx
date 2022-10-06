@@ -2,53 +2,48 @@ import React from "react"
 import SearchForm from "./SearchForm"
 import { Link } from "react-router-dom"
 import Logo from "./Logo"
+import styled from "styled-components"
 //redux
 import { clearDogs } from "../redux/dogSlice"
 import { clearTemperaments } from "../redux/temperamentSlice"
 import { useDispatch } from "react-redux"
 
-const styles = {
-	navbar: {
-		display: "flex",
-		flexDirection: "row",
-		alignItems: "center",
-		height: "100px",
-		justifyContent: "space-between",
-		overflow: "hidden",
-		backgroundColor: "#fff",
-		padding: "0 50px",
-		boxShadow: "0 2px 3px rgba(0, 0, 0, 0.1)",
-	},
-	close: {
-		textDecoration: "none",
-	},
-}
-
 function NavBar() {
-
-    const dispatch = useDispatch()
-    const handleClearAll = () => {
-        dispatch(clearTemperaments())
-        dispatch(clearDogs())
-    }
+	const dispatch = useDispatch()
+	const handleClearAll = () => {
+		dispatch(clearTemperaments())
+		dispatch(clearDogs())
+	}
 
 	return (
-		<header>
-			<nav style={styles.navbar}>
-				<Logo />
+		<Navigation>
+			<Logo />
 
-				<SearchForm />
+			<SearchForm />
 
-				<Link to='/newBreed' style={styles.close}>
-					Create your Breed
-				</Link>
+			<Link to='/newBreed'>CREATE YOUR BREED</Link>
 
-				<Link to='/' onClick={ handleClearAll } style={styles.close}>
-					LandingPage
-				</Link>
-			</nav>
-		</header>
+			<Link to='/' onClick={handleClearAll}>
+				LANDING PAGE
+			</Link>
+		</Navigation>
 	)
 }
 
 export default NavBar
+
+const Navigation = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	height: 100px;
+	justify-content: space-between;
+	overflow: hidden;
+	background-color: #fff;
+	padding: 0 50px;
+	box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+	font-size: 14px;
+	& a {
+		text-decoration: none;
+	}
+`

@@ -2,6 +2,21 @@ import React from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 
+export default function Landing() {
+	return (
+		<LandingContainer>
+			<Intro>
+				<h1>Dogs Breeds</h1>
+
+				<Link to='/breeds'>
+					<span>START</span>
+				</Link>
+			</Intro>
+		</LandingContainer>
+	)
+}
+
+// Styled components
 const LandingContainer = styled.div`
 	background-image: url("../../assets/landing.avif");
 	background-size: cover;
@@ -24,17 +39,3 @@ const Intro = styled.div`
 		}
 	}
 `
-
-export default function Landing() {
-	return (
-		<LandingContainer>
-			<Intro>
-				<h1>Dogs Breeds</h1>
-
-				<Link to='/breeds'>
-					<span>START</span>
-				</Link>
-			</Intro>
-		</LandingContainer>
-	)
-}

@@ -1,27 +1,28 @@
 import React from "react"
+import styled from "styled-components"
 import { Link } from "react-router-dom"
-
-const styles = {
-	logo: {
-		fontWeight: "400",
-		fontSize: "1.5em",
-		fontFamily: "Lucida Sans",
-	},
-	link: {
-		textDecoration: "none",
-		display: "flex",
-		flexDirection: "row",
-		alignItems: "center",
-	},
-}
 
 export default function Logo() {
 	return (
-		<div style={styles.logo}>
-			<Link to='/breeds' style={styles.link}>
-				<img alt='.' src='/assets/logotemp.png' style={{ width: "100px" }} />
+		<LogoContainer>
+			<Link to='/breeds'>
+				<img alt='.' src='/assets/logotemp.png' />
 				<span>Dogs Breeds</span>
 			</Link>
-		</div>
+		</LogoContainer>
 	)
 }
+
+const LogoContainer = styled.div`
+	font-weight: 400;
+	font-size: 1.5rem;
+	& a {
+		text-decoration: none;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		& img {
+			width: 100px;
+		}
+	}
+`

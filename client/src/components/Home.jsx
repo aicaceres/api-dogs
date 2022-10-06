@@ -2,27 +2,24 @@ import React from "react"
 import NavBar from "./NavBar"
 import Items from "./Items"
 import Header from "./Header"
-
-const styles = {
-	layout: {
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-	},
-}
+import styled from "styled-components"
 
 export default function Home() {
 	return (
 		<>
 			<NavBar />
 
-            <section style={styles.layout}>
-
-                <Header />
-
-                <Items />
-
-			</section>
+			<Layout>
+				<Header />
+				<Items />
+			</Layout>
 		</>
 	)
 }
+// Styled component
+const Layout = styled.section`
+	display: flex;
+	justify-content: space-evenly;
+	flex-wrap: wrap;
+	margin-top: 10px;
+`

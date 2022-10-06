@@ -62,20 +62,21 @@ const dogSlice = createSlice({
             state.currentPage = 1
         },
         setOrder(state,action) {
-            const params = action.payload
-            const field = params.type === 'ALPHABETIC' ? 'name' : 'weightMin'
+            const { type, direction } = action.payload
+            const field = type === 'ALPHABETIC' ? 'name' : 'weightMin'
             const sortedArr =
-				params.direction === "ASC"
+				direction === "ASC"
 					? [...state.filtered].sort((a, b) => (a[field] > b[field] ? 1 : -1))
                     : [...state.filtered].sort((a, b) => (b[field] > a[field] ? 1 : -1))
             const newOrder = {
-                ALPHABETIC: params.type === 'ALPHABETIC' ? params.direction : 'ASC',
-                WEIGHT: params.type === 'WEIGHT' ? params.direction : 'ASC',
+                ALPHABETIC: type === 'ALPHABETIC' ? direction : 'ASC',
+                WEIGHT: type === 'WEIGHT' ? direction : 'ASC',
             }
 			return {
                 ...state,
                 order: newOrder,
-				filtered: sortedArr,
+                filtered: sortedArr,
+                currentPage: 1
 			}
         },
 		setByName(state, action) {
