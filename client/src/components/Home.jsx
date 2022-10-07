@@ -7,7 +7,7 @@ import styled from "styled-components"
 export default function Home() {
 	return (
 		<>
-			<NavBar />
+			<NavBar search={true} />
 
 			<Layout>
 				<Header />

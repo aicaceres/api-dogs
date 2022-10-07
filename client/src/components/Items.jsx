@@ -39,7 +39,7 @@ export default function Items() {
 					<Loading />
 				) : !dogs.length ? (
 					<Empty>
-						<h3>There're no breeds yet... </h3>
+						<h3>There're no breeds... </h3>
 						<h2>Create your own!</h2>
 						<img alt='looking...' src='/assets/loading-smell.gif' />
 					</Empty>
@@ -64,10 +64,11 @@ export default function Items() {
 
 //Styled Component
 const Container = styled.div`
-	width: 90%;
+	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	justify-content: center;
+    gap: 20px;
 `
 const Empty = styled.div`
 	width: 100%;

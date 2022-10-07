@@ -30,12 +30,13 @@ const Intro = styled.div`
 	flex-direction: column;
 	align-items: center;
 	color: #ffffff;
+    font-size: 24px;
 	& a {
 		text-decoration: none;
 		font-weight: 700;
 		& span {
 			color: #ffffff;
-			font-size: 25px;
+			font-size: 24px;
 		}
 	}
 `

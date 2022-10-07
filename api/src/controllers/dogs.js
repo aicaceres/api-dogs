@@ -120,7 +120,8 @@ const addNewBreed = async ({
 		if (!image) {
 			const { data } = await axios.get(URL_PHOTO_API)
 			image = data.message
-		}
+        }
+        name = name.charAt(0).toUpperCase() + name.slice(1)
         // create new breed
 		const newDog = await Dog.create({
 			name,

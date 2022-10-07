@@ -8,7 +8,7 @@ import { clearDogs } from "../redux/dogSlice"
 import { clearTemperaments } from "../redux/temperamentSlice"
 import { useDispatch } from "react-redux"
 
-function NavBar() {
+function NavBar({ search }) {
 	const dispatch = useDispatch()
 	const handleClearAll = () => {
 		dispatch(clearTemperaments())
@@ -19,12 +19,15 @@ function NavBar() {
 		<Navigation>
 			<Logo />
 
-			<SearchForm />
-
-			<Link to='/newBreed'>CREATE YOUR BREED</Link>
+			{search && (
+				<>
+					<SearchForm />
+					<Link to='/newBreed'>Create your Breed</Link>
+				</>
+			)}
 
 			<Link to='/' onClick={handleClearAll}>
-				LANDING PAGE
+				Landing Page
 			</Link>
 		</Navigation>
 	)
@@ -42,7 +45,7 @@ const Navigation = styled.div`
 	background-color: #fff;
 	padding: 0 50px;
 	box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-	font-size: 14px;
+	font-size: 16px;
 	& a {
 		text-decoration: none;
 	}

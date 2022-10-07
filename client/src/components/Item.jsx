@@ -10,6 +10,15 @@ export default function Item({
 	image,
 	temperament,
 }) {
+    // text for weight
+    let weightTxt = ' - - '
+    if (weightMin && weightMax) {
+        weightTxt = weightMin + ' - ' + weightMax + ' Kg'
+    }else{
+        if ((weightMin && !weightMax) || (!weightMin && weightMax)) {
+            weightTxt = ((weightMin) ? weightMin : weightMax ) + ' Kg'
+        }
+    }
 	return (
 		<Card>
 			<Link to={`/detail/${id}`}>
@@ -18,7 +27,7 @@ export default function Item({
 						<img src={image} alt={name} loading='lazy' />
 					</div>
 					<div className='card-body'>
-						<h4>{name}</h4>
+                        <h4>{name}</h4>
 						<p>
 							{temperament &&
 								temperament
@@ -28,7 +37,7 @@ export default function Item({
 					</div>
 					<div className='tag'>
 						<span>
-							WEIGHT: {weightMin} - {weightMax} Kg.
+							WEIGHT: {weightTxt}
 						</span>
 					</div>
 				</div>
@@ -42,9 +51,9 @@ const Card = styled.div`
 	display: flex;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
+transition: all 400ms ease-in-out;
 	&:hover {
-		transition: all 400ms ease-in-out;
-		transform: scale(1.05);
+		transform: scale(1.025);
 	}
 	a:link,
 	a:visited,
@@ -84,7 +93,7 @@ const Card = styled.div`
 			width: 100%;
 			min-height: 30px;
 			color: white;
-			background-color: grey;
+			background-color: #6DC264;
 			display: inline-flex;
 			justify-content: center;
 			align-items: center;

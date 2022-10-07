@@ -15,7 +15,7 @@ export default function Logo() {
 
 const LogoContainer = styled.div`
 	font-weight: 400;
-	font-size: 1.5rem;
+	font-size: 26px;
 	& a {
 		text-decoration: none;
 		display: flex;
@@ -23,6 +23,10 @@ const LogoContainer = styled.div`
 		align-items: center;
 		& img {
 			width: 100px;
+		}
+		& span {
+			font-family: "Ubuntu", serif;
+			color: #474747;
 		}
 	}
 `

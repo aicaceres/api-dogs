@@ -48,7 +48,10 @@ const dogSlice = createSlice({
 		setDetail(state, action) {
 			state.detail = action.payload
 			state.loading = false
-		},
+        },
+        setSource(state, action) {
+            state.source = action.payload
+        },
 		getBySource(state, action) {
 			state.source = action.payload
             // apply source filter
@@ -63,11 +66,19 @@ const dogSlice = createSlice({
         },
         setOrder(state,action) {
             const { type, direction } = action.payload
-            const field = type === 'ALPHABETIC' ? 'name' : 'weightMin'
-            const sortedArr =
+             let sortedArr = []
+            if (type === 'ALPHABETIC') {
+                sortedArr =
 				direction === "ASC"
-					? [...state.filtered].sort((a, b) => (a[field] > b[field] ? 1 : -1))
-                    : [...state.filtered].sort((a, b) => (b[field] > a[field] ? 1 : -1))
+					? [...state.filtered].sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1))
+                    : [...state.filtered].sort((a, b) => (b.name.toLowerCase() > a.name.toLowerCase() ? 1 : -1))
+            } else {
+                sortedArr =
+				direction === "ASC"
+					? [...state.filtered].sort((a, b) => (a.weightMin > b.weightMin ? 1 : -1))
+                    : [...state.filtered].sort((a, b) => (b.weightMin > a.weightMin ? 1 : -1))
+            }
+            // update order state
             const newOrder = {
                 ALPHABETIC: type === 'ALPHABETIC' ? direction : 'ASC',
                 WEIGHT: type === 'WEIGHT' ? direction : 'ASC',
@@ -187,6 +198,7 @@ export const {
 	clearFiltered,
     clearDogs,
     setOrder,
+    setSource
 } = dogSlice.actions
 
 export default dogSlice.reducer
