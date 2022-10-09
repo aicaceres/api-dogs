@@ -83,7 +83,9 @@ const getAllData = async (name) => {
 	const api = await getApiData()
 	const db = await getDbData()
 
-	const all = [...api, ...db]
+    const all = [...api, ...db]
+    // sort by default alphabetic ASC
+    all.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1))
     // if filter by name is required
 	return name
 		? all.filter((d) => {

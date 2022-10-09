@@ -1,32 +1,16 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import axios from "axios"
 import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { postNewBreed, fetchAllDogs } from "../redux/dogSlice"
 import { fetchAllTemperaments } from "../redux/temperamentSlice"
-import "../styles/detail.css"
+//import styled from "styled-components"
+import Create, { Input } from './CreateNew.styled'
+
 import NavBar from "./NavBar"
-
-const validate = (field) => {
-	let err = {}
-	const msgRequired = "This field is required!"
-	const msgRange = "Range error!"
-
-	err.name = !field.name ? msgRequired : ""
-	// height and weight ar required
-	err.heightMin = !field.heightMin ? msgRequired : ""
-	err.weightMin = !field.weightMin ? msgRequired : ""
-	// validate the range
-	if (!err.heightMin) {
-		err.heightMin = field.heightMin > field.heightMax ? msgRange : ""
-	}
-	if (!err.weightMin) {
-		err.weightMin =
-			!err.weightMin && field.weightMin > field.weightMax ? msgRange : ""
-	}
-
-	return err
-}
+import Clock from "./SvgIcons/Clock"
+import Camera from "./SvgIcons/Camera"
+import validate from '../validate'
 
 export default function CreateNew() {
 	const history = useHistory()
@@ -35,52 +19,66 @@ export default function CreateNew() {
 	// STATE
 	const initialState = {
 		name: "",
-		heightMin: 0,
-		heightMax: 0,
-		weightMin: 0,
-		weightMax: 0,
+		heightMin: "",
+		heightMax: "",
+		weightMin: "",
+		weightMax: "",
 		lifeSpan: "",
 		image: "/assets/placeholder_dog.png",
 		bredFor: "",
 		temperaments: [],
+		lifeSpanMin: "",
+		lifeSpanMax: "",
 	}
 	const [field, setField] = useState(initialState)
 	const [error, setError] = useState({})
-	const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
+    // lifeSpan
+    const lifeSpanMin = useRef()
+    const lifeSpanMax = useRef()
 
 	// TEMPERAMENTS
-    useEffect(() => {
+	useEffect(() => {
 		dispatch(fetchAllTemperaments())
-    }, [dispatch])
+	}, [dispatch])
 
 	const temperaments = useSelector((state) => state.temperaments.list)
 	const options = temperaments
 		? temperaments.map((t) => {
 				return { label: t.name, value: t.name }
 		  })
-        : []
+		: []
 
 	// handle Temperaments behavior
 	const handleSelectChange = ({ target }) => {
 		// add temperaments to state
-		if (!field.temperaments.includes(target.value)) {
-			setField((state) => ({
-				...state,
-				temperaments: [...state.temperaments, target.value],
-			}))
+		if (!field.temperaments.includes(target.value) && target.value !== "0") {
+			if (field.temperaments.length < 6) {
+				setField((state) => ({
+					...state,
+					temperaments: [...state.temperaments, target.value],
+				}))
+			} else {
+				setError({ ...error, temperament: "Only 6 temperaments allowed!" })
+			}
 		}
 	}
 	const handleDelTemperament = (name) => {
 		setField((state) => ({
 			...state,
 			temperaments: state.temperaments.filter((t) => t !== name),
-		}))
+        }))
+        if (field.temperaments.length <= 6) {
+            setError({ ...error, temperament: "" })
+        }
 	}
 
-	const handleChange = ({ target }) => {
+    const handleChange = ({ target }) => {
+        const lifespan = lifeSpanMin.current.value + ' - ' + lifeSpanMax.current.value + ' years'
 		setField((state) => ({
 			...state,
-			[target.name]: target.value,
+            [target.name]: target.value,
+            lifeSpan: lifespan
 		}))
 	}
 	// handle errors
@@ -102,14 +100,19 @@ export default function CreateNew() {
 	// SUBMIT
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		setError(validate(field))
+		const valid = validate(field)
+		const isError = Object.values(valid).filter((err) => err !== "").length
 		// if no errors submit
-		if (Object.values(error).filter((err) => err !== "").length === 0) {
-			dispatch(postNewBreed(field))
-			alert("submited")
-			setField(initialState)
-			dispatch(fetchAllDogs())
-			history.push("/breeds")
+		if (isError === 0) {
+			if (window.confirm("Confirm save changes?")) {
+				dispatch(postNewBreed(field))
+				alert("Your new breed was succesfull created!")
+				setField(initialState)
+				dispatch(fetchAllDogs())
+				history.push("/breeds")
+			}
+		} else {
+			setError(valid)
 		}
 	}
 
@@ -117,129 +120,208 @@ export default function CreateNew() {
 		<div>
 			<NavBar search={false} />
 
-			<div className='detail'>
+			<Create>
 				<div className='card-img'>
-					<img src={field.image} alt='Load one...' />
-					<button type='button' onClick={getRandomImage}>
-						{loading ? "Loading..." : "Load random photo"}
+					<img src={field.image} alt='Load...' />
+					<button className='loadbtn' type='button' onClick={getRandomImage}>
+						{loading ? (
+							<>
+								<Clock />
+								<span>Loading...</span>
+							</>
+						) : (
+							<>
+								<Camera />
+								<span>Random Photo</span>
+							</>
+						)}
 					</button>
 				</div>
 				<div className='card-info'>
 					<div className='card-text'>
 						<h1>Create your breed</h1>
-						<form onSubmit={handleSubmit}>
-							<div>
-								<label>Name:</label>
+						<form onSubmit={handleSubmit} noValidate>
+							<Input>
 								<input
 									type='text'
 									value={field.name}
 									name='name'
+									className='input_field'
+									required
 									onBlur={handleBlur}
 									onChange={handleChange}
 								/>
-								{error.name && <span> {error.name}! </span>}
-							</div>
-							<div>
-								<label>
-									Weight: {field.weightMin} - {field.weightMax}
+								<label className='input_label'>Name</label>
+								<label className='input_error'>
+									{error.name && error.name}
 								</label>
-								<input
-									type='range'
-									value={field.weightMin}
-									name='weightMin'
-									onBlur={handleBlur}
-									onChange={handleChange}
-								/>
-								<input
-									type='range'
-									value={field.weightMax}
-									min={field.weightMin}
-									name='weightMax'
-									onBlur={handleBlur}
-									onChange={handleChange}
-									disabled={field.weightMin === 0}
-								/>
-								{error.weightMin && <span> {error.weightMin}! </span>}
-							</div>
-							<div>
-								<label>
-									Height: {field.heightMin} - {field.heightMax}
-								</label>
-								<input
-									type='range'
-									value={field.heightMin}
-									name='heightMin'
-									onBlur={handleBlur}
-									onChange={handleChange}
-								/>
-								<input
-									type='range'
-									value={field.heightMax}
-									min={field.heightMin}
-									name='heightMax'
-									onBlur={handleBlur}
-									onChange={handleChange}
-									disabled={field.heightMin === 0}
-								/>
-								{error.heightMin && <span> {error.heightMin}! </span>}
-							</div>
-							<div>
-								<label>Life Span</label>
-								<input
-									type='text'
-									value={field.lifeSpan}
-									name='lifeSpan'
-									onBlur={handleBlur}
-									onChange={handleChange}
-								/>
-							</div>
-							<div>
-								<label>Bred For</label>
+							</Input>
+							<Input>
 								<input
 									type='text'
 									value={field.bredFor}
 									name='bredFor'
+									required
+									className='input_field'
 									onBlur={handleBlur}
 									onChange={handleChange}
 								/>
-							</div>
-							<div>
-								<label>Temperaments</label>
-								<select name='selectTemperament' onChange={handleSelectChange}>
-									<option key='0' value='0'>
-										Select Temperament...
-									</option>
-									{options.map((option) => (
-										<option key={option.value} value={option.value}>
-											{option.label}
+								<label className='input_label'>Bred For</label>
+							</Input>
+
+							{/* WEIGHT */}
+							<Input width='50%' float='left'>
+								<input
+									type='text'
+									value={field.weightMin}
+									name='weightMin'
+									required
+									className='input_field'
+									onBlur={handleBlur}
+									onChange={handleChange}
+								/>
+								<label className='input_label'>Weight: Min</label>
+								<label className='input_error'>
+									{error.weightMin && error.weightMin}
+								</label>
+							</Input>
+							<Input width='40%'>
+								<input
+									type='text'
+									value={field.weightMax}
+									name='weightMax'
+									required
+									className='input_field'
+									onBlur={handleBlur}
+									onChange={handleChange}
+								/>
+								<label className='input_label'>Max</label>
+								<label className='input_error'>
+									{error.weightMax && error.weightMax}
+                                </label>
+                                <label className="input_measure">KG</label>
+                            </Input>
+							{/* HEIGHT */}
+							<Input width='50%' float='left'>
+								<input
+									type='text'
+									value={field.heightMin}
+									name='heightMin'
+									required
+									className='input_field'
+									onBlur={handleBlur}
+									onChange={handleChange}
+								/>
+								<label className='input_label'>Height: Min</label>
+								<label className='input_error'>
+									{error.heightMin && error.heightMin}
+								</label>
+                            </Input>
+							<Input width='40%'>
+								<input
+									type='text'
+									value={field.heightMax}
+									name='heightMax'
+									required
+									className='input_field'
+									onBlur={handleBlur}
+									onChange={handleChange}
+								/>
+								<label className='input_label'>Max</label>
+								<label className='input_error'>
+									{error.heightMax && error.heightMax}
+                                </label>
+                                <label className="input_measure">CM</label>
+                            </Input>
+							{/* LIFESPAN */}
+							<Input width='50%' float='left'>
+								<input
+									type='text'
+									value={field.lifeSpanMin}
+                                    name='lifeSpanMin'
+                                    ref = {lifeSpanMin}
+									required
+									className='input_field'
+									onBlur={handleBlur}
+									onChange={handleChange}
+								/>
+								<label className='input_label'>Life Span: Min</label>
+							</Input>
+							<Input width='40%'>
+								<input
+									type='text'
+									value={field.lifeSpanMax}
+                                    name='lifeSpanMax'
+                                    ref = {lifeSpanMax}
+									required
+									className='input_field'
+									onBlur={handleBlur}
+									onChange={handleChange}
+								/>
+                                <label className='input_label'>Max</label>
+                                <label className='input_error'>
+									{error.lifeSpanMax && error.lifeSpanMax}
+                                </label>
+                                <label className='input_measure'>Years</label>
+                            </Input>
+
+							{/* Life span field */}
+							<input
+								type='text'
+								value={field.lifeSpan}
+								name='lifeSpan'
+								onChange={handleChange}
+								hidden
+							/>
+							<Input height='90px'>
+								<div className='input_select'>
+									<select
+										name='selectTemperament'
+										onChange={handleSelectChange}
+									>
+										<option key='0' value='0'>
+											Select Temperaments...
 										</option>
-									))}
-								</select>
+										{options.map((option) => (
+											<option key={option.value} value={option.value}>
+												{option.label}
+											</option>
+										))}
+									</select>
+									<label className='input_error select'>
+										{error.temperament && error.temperament}
+									</label>
+								</div>
 								<div>
-									{field.temperaments.length &&
-										field.temperaments.map((t) => (
-											<div key={t}>
-												{t}{" "}
-												<button onClick={() => handleDelTemperament(t)}>
-													X
-												</button>
-											</div>
+									{!field.temperaments.length ||
+										field.temperaments.map( t => (
+											<span className='temperament-tag' key={t}>
+												{t}
+												<span
+													className='remove'
+													onClick={() => handleDelTemperament(t)}
+												>
+													x
+												</span>
+											</span>
 										))}
 								</div>
-                            </div>
-                            <div className='card-btn'>
-						<button type='submit'>
-							Save
-						</button>
-						<button type='button' onClick={() => history.goBack()}>
-							Cancel
-						</button>
-					</div>
+							</Input>
+
+							<div className='card-btn'>
+								<button
+									className='cancel'
+									type='button'
+									onClick={() => history.goBack()}
+								>
+									Cancel
+								</button>
+								<button type='submit'>Save</button>
+							</div>
 						</form>
 					</div>
-
 				</div>
-			</div>
+			</Create>
 		</div>
 	)
 }

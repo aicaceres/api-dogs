@@ -42,18 +42,18 @@ export default function Search() {
 			<form>
 				<input
 					type='text'
-					className='search__input'
+					className='search_input'
 					placeholder='Search by name...'
 					onChange={handleInput}
 					value={input}
 				/>
-				<button className='search__button' type='submit' onClick={handleSearch}>
-					<svg className='search__icon' aria-hidden='true' viewBox='0 0 24 24'>
+				<button className='search_button' type='submit' onClick={handleSearch}>
+					<svg className='search_icon' aria-hidden='true' viewBox='0 0 24 24'>
 						<path d='M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z'></path>
 					</svg>
 				</button>
 			</form>
-			<div className='search__select'>
+			<div className='search_select'>
 				<label>
 					<select onChange={selectHandleOnChange} value={selected}>
 						<option key='0' value='0'>
@@ -77,7 +77,7 @@ const SearchBar = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	text-align: center;
-	.search__input {
+	.search_input {
 		font-family: sans-serif;
 		font-size: 14px;
 		background-color: #f4f2f2;
@@ -97,19 +97,19 @@ const SearchBar = styled.div`
 			background-color: #f0eeee;
 		}
 	}
-	.search__button {
+	.search_button {
 		border: none;
 		background-color: #f4f2f2;
 		&:hover {
 			cursor: pointer;
 		}
-		.search__icon {
+		.search_icon {
 			height: 1.3em;
 			width: 1.3em;
 			fill: #b4b4b4;
 		}
 	}
-	.search__select {
+	.search_select {
 		position: relative;
 		float: left;
 		min-width: 200px;
@@ -123,7 +123,6 @@ const SearchBar = styled.div`
 			-ms-transform: rotate(90deg);
 			transform: rotate(90deg);
 			right: 12px;
-			/*Adjust for position however you want*/
 			top: 10px;
 			padding: 0 0 2px;
 			position: absolute;
