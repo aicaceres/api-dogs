@@ -1,31 +1,31 @@
 import React from "react"
 import styled from "styled-components"
-import { Link } from "react-router-dom"
 
 export default function Logo() {
+
 	return (
 		<LogoContainer>
-			<Link to='/breeds'>
+			<a href='/breeds'>
 				<img alt='.' src='/assets/logotemp.png' />
-				<span>Dogs Breeds</span>
-			</Link>
+				<span>Breeds</span>
+            </a>
 		</LogoContainer>
 	)
 }
 
 const LogoContainer = styled.div`
-	font-weight: 400;
-	font-size: 26px;
-	& a {
+	a {
 		text-decoration: none;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		& img {
+		img {
 			width: 100px;
 		}
-		& span {
-			font-family: "Ubuntu", serif;
+		span {
+			font-family: "Lobster", serif;
+			font-size: 36px;
+			padding-left: 10px;
 			color: #474747;
 		}
 	}

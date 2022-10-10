@@ -1,5 +1,5 @@
 const { Router } = require("express")
-const { getAllData, getByIdRaza, addNewBreed } = require("../controllers/dogs")
+const { getAllData, getByIdRaza, addNewBreed, deleteDbBreed } = require("../controllers/dogs")
 
 const server = Router()
 
@@ -13,7 +13,6 @@ server.get("/", async (req, res, next) => {
 		res.status(200).send(dogsData)
 	} catch (error) {
 		res.status(400).send({ error: error.message })
-		//next(error)
 	}
 })
 
@@ -30,8 +29,18 @@ server.get("/:idRaza", async (req, res) => {
 
 // POST /dogs
 server.post("/", async (req, res) => {
-	try {
-		const response = await addNewBreed(req.body)
+    try {
+       const response = await addNewBreed(req.body)
+		res.status(200).send(response)
+	} catch (error) {
+		res.status(400).send({ error: error.message })
+	}
+})
+// DELETE /dogs
+server.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params
+        const response = await deleteDbBreed(id)
 		res.status(200).send(response)
 	} catch (error) {
 		res.status(400).send({ error: error.message })

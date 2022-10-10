@@ -10,7 +10,7 @@ const Create = styled.div`
 	.card-img {
 		width: 50%;
 		display: flex;
-		height: 500px;
+		height: 480px;
 		position: relative;
 		img {
 			width: 100%;
@@ -38,7 +38,7 @@ const Create = styled.div`
 		}
 	}
 	.card-info {
-		height: 460px;
+		height: 440px;
 		width: 50%;
 		padding: 20px 40px;
 		border-radius: 0 5px 0px 5px;
@@ -47,10 +47,10 @@ const Create = styled.div`
 			min-height: 280px;
 			width: 100%;
 			h1 {
-				font-family: "Bentham", serif;
-				font-size: 30px;
+				font-family: "Lobster", serif;
+				font-size: 34px;
 				color: #474747;
-				margin: 10px 0;
+				margin: 8px 0;
 			}
 			form {
 				color: #555;
@@ -61,6 +61,7 @@ const Create = styled.div`
 					display: flex;
 					justify-content: center;
 					gap: 2rem;
+
 					button {
 						height: 40px;
 						width: 176px;
@@ -77,15 +78,35 @@ const Create = styled.div`
 						outline: none;
 						&:hover {
 							background-color: #a6d4a0;
+							cursor: pointer;
 						}
+                        &:disabled{
+
+                        }
 						&.cancel {
 							background-color: #aaa;
 							&:hover {
 								background-color: #ccc;
 							}
 						}
+                        &.error{
+                            background-color:red;
+                        }
+
 					}
 				}
+.status_message {
+
+	color: white;
+	font-size: 14px;
+	top: 40%;
+	left: 35%;
+	position: fixed;
+	background-color: red;
+	padding: 10px 150px;
+	z-index: 9;
+
+	}
 			}
 		}
 	}
@@ -102,8 +123,9 @@ export const Input = styled.div`
 	height: ${(props) => (props.height ? props.height : "inherit")};
 	.input_label {
 		color: #8597a3;
+		font-size: 14px;
 		position: absolute;
-		top: 20px;
+		top: 16px;
 		-moz-transition: all 0.3s;
 		-o-transition: all 0.3s;
 		-webkit-transition: all 0.3s;
@@ -119,12 +141,13 @@ export const Input = styled.div`
 			right: 40px;
 		}
 	}
-    .input_measure{
-        color: #8597a3;
+	.input_measure {
+		font-size: 14px;
+		color: #8597a3;
 		position: absolute;
 		top: 20px;
-        right: -50px;
-    }
+		right: -50px;
+	}
 	.input_field {
 		border: 0;
 		padding: 0;
@@ -133,7 +156,8 @@ export const Input = styled.div`
 		border-bottom: 2px solid #eee;
 		font: inherit;
 		font-size: 14px;
-		line-height: 30px;
+		line-height: 26px;
+		padding-left: 5px;
 	}
 	.input_field:focus,
 	.input_field:valid {
@@ -142,12 +166,12 @@ export const Input = styled.div`
 	}
 	.input_field:focus + .input_label,
 	.input_field:valid + .input_label {
-		color: #555;
+		color: #666;
 		font-size: 12px;
-		-moz-transform: translateY(-20px);
-		-ms-transform: translateY(-20px);
-		-webkit-transform: translateY(-20px);
-		transform: translateY(-20px);
+		-moz-transform: translateY(-18px);
+		-ms-transform: translateY(-18px);
+		-webkit-transform: translateY(-18px);
+		transform: translateY(-18px);
 	}
 	.input_select {
 		position: relative;
@@ -192,7 +216,7 @@ export const Input = styled.div`
 		text-transform: uppercase;
 		padding: 5px 15px;
 		margin: 3px 5px;
-		background-color: antiquewhite;
+		background-color: powderblue;
 		display: inline-block;
 		position: relative;
 		.remove {

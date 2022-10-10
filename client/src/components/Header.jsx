@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import Sort from './SvgIcons/Sort'
+import { Sort } from './SvgIcons'
 // redux
 import { getBySource, setOrder } from "../redux/dogSlice"
 import { setSelected } from "../redux/temperamentSlice"
@@ -112,6 +112,7 @@ const HeaderContainer = styled.div`
 	}
 
 	.radio-input {
+        font-family: 'Epilogue';
 		position: relative;
 		padding: 3px 0px 0px 42px;
 		display: inline;

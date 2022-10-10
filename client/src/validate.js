@@ -7,7 +7,9 @@ const validate = (field) => {
 		err.name = msgRequired
 	} else {
 		err.name = field.name.length > 30 ? "Name too long (30 Max)" : ""
-	}
+    }
+    // bredfor
+    err.bredFor = field.bredFor.length > 65 ? "Name too long (60 Max)" : ""
 
 	// height and weight ar required and be number
 	const msgNumber = "Must be number"

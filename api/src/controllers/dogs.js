@@ -51,7 +51,7 @@ const getDbData = async () => {
 		if (dogs.length) {
 			// format record like API
 			const dbData = await dogs.map((d) => {
-				const tempArray = d.temperaments.map( t => t.name)
+				const tempArray = d.temperaments.map((t) => t.name)
 				field = d.dataValues
 				data = {
 					id: field.id,
@@ -83,10 +83,10 @@ const getAllData = async (name) => {
 	const api = await getApiData()
 	const db = await getDbData()
 
-    const all = [...api, ...db]
-    // sort by default alphabetic ASC
-    all.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1))
-    // if filter by name is required
+	const all = [...api, ...db]
+	// sort by default alphabetic ASC
+	all.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1))
+	// if filter by name is required
 	return name
 		? all.filter((d) => {
 				return d.name.toLowerCase().search(name.toLowerCase()) >= 0
@@ -96,14 +96,14 @@ const getAllData = async (name) => {
 
 // Get data by idRaza
 const getByIdRaza = async (idRaza) => {
-    try {
-        const data = await getAllData()
-	    const dog = data.find((d) => d.id.toString() === idRaza.toString())
-	    return dog || {}
-    } catch (error) {
-        console.error("getByIdRaza: ", error)
+	try {
+		const data = await getAllData()
+		const dog = data.find((d) => d.id.toString() === idRaza.toString())
+		return dog || {}
+	} catch (error) {
+		console.error("getByIdRaza: ", error)
 		return error
-    }
+	}
 }
 
 // Create new breed
@@ -122,9 +122,9 @@ const addNewBreed = async ({
 		if (!image) {
 			const { data } = await axios.get(URL_PHOTO_API)
 			image = data.message
-        }
-        name = name.charAt(0).toUpperCase() + name.slice(1)
-        // create new breed
+		}
+		name = name.charAt(0).toUpperCase() + name.slice(1)
+		// create new breed
 		const newDog = await Dog.create({
 			name,
 			heightMin,
@@ -146,12 +146,34 @@ const addNewBreed = async ({
 			  })
 			: []
 
-        return newDog
-
+		return newDog
 	} catch (error) {
-        console.error("addNewBreed: ", error)
-        return error
+		console.error("addNewBreed: ", error)
+		return error
 	}
 }
 
-module.exports = { getApiData, getDbData, getAllData, getByIdRaza, addNewBreed }
+// Delete from database
+const deleteDbBreed = async (id) => {
+	try {
+		const res = await Dog.destroy({
+			where: {
+				id,
+			},
+			force: true,
+		})
+		return res
+	} catch (error) {
+		console.error("deleteDbBreed: ", error.message)
+		return error
+	}
+}
+
+module.exports = {
+	getApiData,
+	getDbData,
+	getAllData,
+	getByIdRaza,
+	addNewBreed,
+	deleteDbBreed,
+}

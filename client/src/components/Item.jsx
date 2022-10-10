@@ -10,15 +10,15 @@ export default function Item({
 	image,
 	temperament,
 }) {
-    // text for weight
-    let weightTxt = ' - - '
-    if (weightMin && weightMax) {
-        weightTxt = weightMin + ' - ' + weightMax + ' Kg'
-    }else{
-        if ((weightMin && !weightMax) || (!weightMin && weightMax)) {
-            weightTxt = ((weightMin) ? weightMin : weightMax ) + ' Kg'
-        }
-    }
+	// text for weight
+	let weightTxt = " - - "
+	if (weightMin && weightMax) {
+		weightTxt = weightMin + " - " + weightMax + " Kg"
+	} else {
+		if ((weightMin && !weightMax) || (!weightMin && weightMax)) {
+			weightTxt = (weightMin ? weightMin : weightMax) + " Kg"
+		}
+	}
 	return (
 		<Card>
 			<Link to={`/detail/${id}`}>
@@ -27,7 +27,7 @@ export default function Item({
 						<img src={image} alt={name} loading='lazy' />
 					</div>
 					<div className='card-body'>
-                        <h4>{name}</h4>
+						<h4>{name}</h4>
 						<p>
 							{temperament &&
 								temperament
@@ -35,10 +35,8 @@ export default function Item({
 									.map((t, i) => <span key={t}>{i === 2 ? t : t + ", "}</span>)}
 						</p>
 					</div>
-					<div className='tag'>
-						<span>
-							WEIGHT: {weightTxt}
-						</span>
+					<div className='bottom'>
+						<span>WEIGHT: {weightTxt}</span>
 					</div>
 				</div>
 			</Link>
@@ -51,7 +49,7 @@ const Card = styled.div`
 	display: flex;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
-transition: all 400ms ease-in-out;
+	transition: all 400ms ease-in-out;
 	&:hover {
 		transform: scale(1.025);
 	}
@@ -85,15 +83,17 @@ transition: all 400ms ease-in-out;
 				margin: 0 0 5px;
 			}
 			p {
+				font-family: "Roboto";
 				font-size: 13px;
 				margin: 0 0 15px;
+				color: #555;
 			}
 		}
-		.tag {
+		.bottom {
 			width: 100%;
 			min-height: 30px;
 			color: white;
-			background-color: #6DC264;
+			background-color: #6dc264;
 			display: inline-flex;
 			justify-content: center;
 			align-items: center;
