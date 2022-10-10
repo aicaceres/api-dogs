@@ -7,76 +7,99 @@ import axios from "axios"
 // 	}
 // source: "ALL | API | DB"
 
-const initialOrder = {
+const defaultOrder = {
 	ALPHABETIC: "ASC",
-	WEIGHT: "ASC",
 }
 
 const initialState = {
 	list: [],
 	filtered: [],
-	order: initialOrder,
+	order: defaultOrder,
 	source: "ALL",
+	selectedTemperament: "0",
 	currentPage: 1,
 	detail: {},
 	loading: true,
-	status: '',
+	status: "",
+	searchName: "",
 }
 
 const dogSlice = createSlice({
 	name: "dogs",
 	initialState,
 	reducers: {
-		setLoading(state) {
-			state.loading = true
+		setLoading(state, action) {
+			state.loading = action.payload
 		},
 		setStatus(state, action) {
 			state.status = action.payload
-        },
-        clearStatus(state) {
-			state.status = ''
+			state.loading = false
 		},
 		setCurrentPage(state, action) {
 			state.currentPage = action.payload
 		},
 		setAllDogs(state, action) {
-			state.list = action.payload
-			state.filtered = action.payload
-			state.currentPage = 1
-			state.loading = false
+			return {
+				...initialState,
+				list: action.payload,
+				filtered: action.payload,
+				loading: false,
+			}
 		},
-		setFilteredDogs(state, action) {
-			state.filtered = action.payload
-			state.loading = false
-			// reset order and pagination
-			state.order = initialOrder
-			state.currentPage = 1
+		clearDogs() {
+			return {
+				...initialState,
+			}
 		},
 		setDetail(state, action) {
 			state.detail = action.payload
 			state.loading = false
+			state.status = "OK"
+		},
+		clearDetail(state) {
+			state.detail = {}
+			state.status = ""
+		},
+		setSelectedTemperament(state, action) {
+			state.selectedTemperament = action.payload
 		},
 		setSource(state, action) {
 			state.source = action.payload
 		},
-		getBySource(state, action) {
-			state.source = action.payload
-			// apply source filter
-			if (action.payload === "ALL") {
-				state.filtered = state.list
-			} else {
-				state.filtered = state.list.filter((f) => f.source === state.source)
-			}
-			// reset order and pagination
-			state.order = initialOrder
-			state.currentPage = 1
-		},
 		setOrder(state, action) {
-			const { type, direction } = action.payload
+			state.order = action.payload
+		},
+		setSearchName(state, action) {
+			state.searchName = action.payload
+		},
+
+		applyFilters(state) {
+			// apply all filters - payload = all dogs
+			let filtered = state.list
+			// apply filter by source
+			filtered =
+				state.source === "ALL"
+					? filtered
+					: filtered.filter((f) => f.source === state.source)
+			// apply filter by temperament
+			filtered =
+				state.selectedTemperament === "0"
+					? filtered
+					: filtered.filter((d) =>
+							d.temperament.includes(state.selectedTemperament)
+					  )
+
+			state.filtered = filtered
+			state.loading = false
+			state.currentPage = 1
+			state.status = "OK"
+		},
+
+		applyOrder(state) {
 			let sortedArr = []
-			if (type === "ALPHABETIC") {
+			if (state.order.ALPHABETIC) {
 				sortedArr =
-					direction === "ASC"
+					state.order.ALPHABETIC === "ASC"
 						? [...state.filtered].sort((a, b) =>
 								a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
 						  )
@@ -85,7 +108,7 @@ const dogSlice = createSlice({
 						  )
 			} else {
 				sortedArr =
-					direction === "ASC"
+					state.order.WEIGHT === "ASC"
 						? [...state.filtered].sort((a, b) =>
 								a.weightMin > b.weightMin ? 1 : -1
 						  )
@@ -93,67 +116,62 @@ const dogSlice = createSlice({
 								b.weightMin > a.weightMin ? 1 : -1
 						  )
 			}
-			// update order state
-			const newOrder = {
-				ALPHABETIC: type === "ALPHABETIC" ? direction : "ASC",
-				WEIGHT: type === "WEIGHT" ? direction : "ASC",
-			}
 			return {
 				...state,
-				order: newOrder,
 				filtered: sortedArr,
 				currentPage: 1,
-			}
-		},
-		setByName(state, action) {
-			// apply source filter
-			state.filtered =
-				state.source === "ALL"
-					? action.payload
-					: action.payload.filter((f) => f.source === state.source)
-			state.loading = false
-			// reset order and pagination
-			state.order = initialOrder
-			state.currentPage = 1
-		},
-		clearDetail(state) {
-			state.detail = {}
-		},
-		clearFiltered(state) {
-			state.filtered = []
-			// reset order and pagination
-			state.order = initialOrder
-			state.currentPage = 1
-		},
-		clearDogs() {
-			return {
-				...initialState,
 			}
 		},
 	},
 })
 
+export const getByOrden = (order) => {
+	return (dispatch) => {
+		try {
+			dispatch(setOrder(order))
+			dispatch(applyOrder())
+		} catch (error) {
+			console.error("getByOrden:", error.message)
+		}
+	}
+}
+
+// filter by Source
+export const getBySource = (source) => {
+	return (dispatch) => {
+		try {
+			dispatch(setSource(source))
+			dispatch(applyFilters())
+			dispatch(applyOrder())
+		} catch (error) {
+			console.error("getByTemperament:", error.message)
+		}
+	}
+}
+
+// filter by Temperament
+export const getByTemperament = (selected) => {
+	return (dispatch) => {
+		try {
+			dispatch(setSelectedTemperament(selected))
+			dispatch(applyFilters())
+			dispatch(applyOrder())
+		} catch (error) {
+			console.error("getByTemperament:", error.message)
+		}
+	}
+}
 // load all dogs from API and database
 export const fetchAllDogs = () => {
 	return async (dispatch) => {
 		try {
-			dispatch(setLoading())
+			dispatch(setLoading(true))
 			const { data } = await axios.get("http://localhost:3001/dogs")
-			await dispatch(setAllDogs(data))
+			dispatch(setAllDogs(data))
+			dispatch(setSearchName(""))
 		} catch (error) {
 			console.error("fetchAllDogs:", error)
-		}
-	}
-}
-// search by Id and fill detail
-export const searchById = (id) => {
-	return async (dispatch) => {
-		try {
-			dispatch(setLoading())
-			const { data } = await axios.get(`http://localhost:3001/dogs/${id}`)
-			dispatch(setDetail(data))
-		} catch (error) {
-			console.error("searchById:", error)
+			dispatch(setStatus(error.message))
 		}
 	}
 }
@@ -161,30 +179,29 @@ export const searchById = (id) => {
 export const searchByName = (name) => {
 	return async (dispatch) => {
 		try {
-			dispatch(setLoading())
+			dispatch(setLoading(true))
 			const { data } = await axios.get(
 				`http://localhost:3001/dogs?name=${name}`
 			)
-			dispatch(setByName(data))
+			dispatch(setAllDogs(data))
+			dispatch(setSearchName(name))
+			dispatch(applyFilters(data))
 		} catch (error) {
-			console.error("searchByName: ", error)
+			console.error("searchByName: ", error.message)
+			dispatch(setStatus(error.message))
 		}
 	}
 }
-// filter by Temperament
-export const getByTemperament = (selected) => {
+// search by Id and fill detail
+export const searchById = (id) => {
 	return async (dispatch) => {
 		try {
-			dispatch(clearFiltered())
-			dispatch(setLoading())
-			const { data } = await axios.get("http://localhost:3001/dogs")
-			const filtered =
-				(await selected) === "0"
-					? data
-					: data.filter((d) => d.temperament.includes(selected))
-			dispatch(setFilteredDogs(filtered))
+			dispatch(setLoading(true))
+			const { data } = await axios.get(`http://localhost:3001/dogs/${id}`)
+			dispatch(setDetail(data))
 		} catch (error) {
-			console.error("getByTemperament:", error)
+			console.error("searchById:", error.message)
+			dispatch(setStatus(error.response ? error.response.data : error.message))
 		}
 	}
 }
@@ -192,46 +209,56 @@ export const getByTemperament = (selected) => {
 export const postNewBreed = (formData) => {
 	return async (dispatch) => {
 		try {
-            await axios.post("http://localhost:3001/dogs", formData)
+			const { data: dogCreated } = await axios.post(
+				"http://localhost:3001/dogs",
+				formData
+			)
+			dispatch(setLoading(true))
 			const { data } = await axios.get("http://localhost:3001/dogs")
-            await dispatch(setAllDogs(data))
-            dispatch(setStatus('OK'))
+			dispatch(setAllDogs(data))
+			dispatch(setStatus("OK"))
+			return dogCreated
 		} catch (error) {
-            dispatch(setStatus(error.message))
+			// catch unique error.
+			const message = error.response
+				? error.response.data.includes("dogs_name_key")
+					? `The name "${formData.name}" already exists!`
+					: error.response.data
+				: error.message
+			dispatch(setStatus(message))
 			console.error("postNewBreed:", error)
 		}
 	}
 }
 // delete from database
-export const deleteBreed = (id) => {
-	return async (dispatch) => {
-		try {
-            dispatch(setLoading())
-			const { data } = await axios.delete(`http://localhost:3001/dogs/${id}`)
-            await dispatch(setAllDogs(data))
-            await dispatch(setStatus('OK'))
-        } catch (error) {
-            dispatch(setStatus(error.message))
-			console.error("deleteBreed:", error.message)
-		}
-	}
-}
+// export const deleteBreed = (id) => {
+// 	return async (dispatch) => {
+// 		try {
+//             dispatch(setLoading(true))
+// 			const { data } = await axios.delete(`http://localhost:3001/dogs/${id}`)
+//             await dispatch(setAllDogs(data))
+//             await dispatch(setStatus('OK'))
+//         } catch (error) {
+//             dispatch(setStatus(error.message))
+// 			    console.error("deleteBreed:", error.message)
+// 		}
+// 	}
+// }
 
 export const {
 	setLoading,
-    setStatus,
-   	clearStatus,
+	setStatus,
 	setCurrentPage,
 	setAllDogs,
+	clearDogs,
 	setDetail,
 	clearDetail,
-	getBySource,
-	setFilteredDogs,
-	setByName,
-	clearFiltered,
-	clearDogs,
-	setOrder,
+	setSelectedTemperament,
 	setSource,
+	setOrder,
+	setSearchName,
+	applyFilters,
+	applyOrder,
 } = dogSlice.actions
 
 export default dogSlice.reducer

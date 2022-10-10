@@ -11,17 +11,4 @@ const router = Router();
 router.use('/dogs', dogs)
 router.use('/temperaments', temperaments)
 
-// Pasar error al manejo en app.js
-// router.get('/', (req, res, next) => {
-//     try {
-
-//     } catch (error) {
-//         next(error)
-//     }
-// })
-
-// router.get('*', (req, res) => {
-//     res.sendStatus(400)
-// })
-
 module.exports = router;

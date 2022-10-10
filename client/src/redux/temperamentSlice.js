@@ -2,8 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import axios from 'axios'
 
 const initialState = {
-	list: [],
-	selected: "0",
+	list: []
 }
 
 const temperamentSlice = createSlice({
@@ -12,9 +11,6 @@ const temperamentSlice = createSlice({
 	reducers: {
 		setAllTemperaments(state, action) {
 			state.list = action.payload
-		},
-		setSelected(state, action) {
-			state.selected = action.payload
 		},
 		clearTemperaments() {
 			return {
@@ -30,12 +26,12 @@ export const fetchAllTemperaments = () => {
             const { data } = await axios.get("http://localhost:3001/temperaments")
             dispatch(setAllTemperaments(data))
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
         }
 	}
 }
 
-export const { setAllTemperaments, setSelected, clearTemperaments } =
+export const { setAllTemperaments, clearTemperaments } =
 	temperamentSlice.actions
 
 export default temperamentSlice.reducer

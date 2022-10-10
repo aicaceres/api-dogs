@@ -2,14 +2,15 @@ import React, { useState, useEffect, useRef } from "react"
 import axios from "axios"
 import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { postNewBreed, fetchAllDogs, clearStatus } from "../redux/dogSlice"
+import { postNewBreed, setStatus } from "../redux/dogSlice"
 import { fetchAllTemperaments } from "../redux/temperamentSlice"
 //import styled from "styled-components"
 import Create, { Input } from "./CreateNew.styled"
 
 import NavBar from "./NavBar"
-import { Clock, Camera } from "./SvgIcons"
+import { Clock, Camera, CheckOK } from "./SvgIcons"
 import validate from "../validate"
+import ErrorMessage from "./ErrorMessage"
 
 export default function CreateNew() {
 	const history = useHistory()
@@ -17,6 +18,7 @@ export default function CreateNew() {
 
 	// STATE
 	const initialState = {
+		id: "",
 		name: "",
 		heightMin: "",
 		heightMax: "",
@@ -38,25 +40,16 @@ export default function CreateNew() {
 	const status = useSelector((state) => state.dogs.status)
 
 	// TEMPERAMENTS
-    useEffect(() => {
-        if (status === '') {
-            // first entry
-            dispatch(fetchAllTemperaments())
-		    lifeSpanMin.current.scrollIntoView()
-        } else if (status === "OK") {
-            // post OK
-             setTimeout(() => {
-			    dispatch(fetchAllDogs())
-                dispatch(clearStatus())
-			    history.push("/breeds")
-            },3000)
-        } else {
-            // post ERROR
-            setTimeout(() => {
-                dispatch(clearStatus())
-            },3000)
-        }
-
+	useEffect(() => {
+		if (status === "") {
+			dispatch(fetchAllTemperaments())
+			lifeSpanMin.current.scrollIntoView()
+		} else if (status !== "OK") {
+			// clean ERROR
+			setTimeout(() => {
+				dispatch(setStatus(''))
+			}, 4000)
+		}
 	}, [dispatch, status, history])
 
 	const temperaments = useSelector((state) => state.temperaments.list)
@@ -121,8 +114,18 @@ export default function CreateNew() {
 		const valid = validate(field)
 		const isError = Object.values(valid).filter((err) => err !== "").length
 		// if no local errors submit
-		if (isError === 0) {
-			dispatch(postNewBreed(field))
+        if (isError === 0) {
+            const response = await dispatch(postNewBreed(field))
+            if (response) {
+                setField((state) => ({
+                    ...state,
+                    id: response.id,
+                }))
+                setTimeout(() => {
+                    dispatch(setStatus(''))
+                    history.push(`/detail/${response.id}`)
+                }, 2000)
+            }
 		} else {
 			setError(valid)
 		}
@@ -154,7 +157,7 @@ export default function CreateNew() {
 						<h1>Create your breed</h1>
 						<form onSubmit={handleSubmit} noValidate>
 							{status !== "OK" && status !== "" ? (
-								<label className='status_message'>{status}</label>
+								<ErrorMessage msg={status} />
 							) : (
 								""
 							)}
@@ -183,8 +186,8 @@ export default function CreateNew() {
 									onBlur={handleBlur}
 									onChange={handleChange}
 								/>
-                                <label className='input_label'>Bred For</label>
-                                <label className='input_error'>
+								<label className='input_label'>Bred For</label>
+								<label className='input_error'>
 									{error.bredFor && error.bredFor}
 								</label>
 							</Input>
@@ -219,7 +222,7 @@ export default function CreateNew() {
 								<label className='input_error'>
 									{error.weightMax && error.weightMax}
 								</label>
-								<label className='input_measure'>KG</label>
+								<label className='label_measure'>KG</label>
 							</Input>
 							{/* HEIGHT */}
 							<Input width='50%' float='left'>
@@ -251,7 +254,7 @@ export default function CreateNew() {
 								<label className='input_error'>
 									{error.heightMax && error.heightMax}
 								</label>
-								<label className='input_measure'>CM</label>
+								<label className='label_measure'>CM</label>
 							</Input>
 							{/* LIFESPAN */}
 							<Input width='50%' float='left'>
@@ -282,10 +285,10 @@ export default function CreateNew() {
 								<label className='input_error'>
 									{error.lifeSpanMax && error.lifeSpanMax}
 								</label>
-								<label className='input_measure'>Years</label>
+								<label className='label_measure'>Years</label>
 							</Input>
 
-							{/* Life span field */}
+							{/* Life span field for database */}
 							<input
 								type='text'
 								value={field.lifeSpan}
@@ -337,14 +340,14 @@ export default function CreateNew() {
 									{status === "" ? "Cancel" : "Return"}
 								</button>
 								<button
-									className={(status !== "OK" && status !== "") ? "error" : ''}
+									className={status === "OK" ? "success" : status !== "" ? "error" : ""}
 									disabled={status === "OK"}
 									type='submit'
 								>
 									{status === ""
 										? "Save"
 										: status === "OK"
-										? "Success"
+										? <CheckOK/>
 										: "Error!"}
 								</button>
 							</div>

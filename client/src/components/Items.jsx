@@ -2,6 +2,8 @@ import { useEffect } from "react"
 import styled from "styled-components"
 import Item from "./Item"
 import Loading from "./Loading"
+import EmptyData from './EmptyData'
+import ErrorMessage from './ErrorMessage'
 // redux
 import { fetchAllDogs, setCurrentPage } from "../redux/dogSlice"
 import { useDispatch, useSelector } from "react-redux"
@@ -13,7 +15,8 @@ export default function Items() {
 		list,
 		filtered: dogs,
 		currentPage,
-		loading,
+        loading,
+        status,
 	} = useSelector((state) => state.dogs)
 
 	// pagination
@@ -38,11 +41,7 @@ export default function Items() {
 				{loading ? (
 					<Loading />
 				) : !dogs.length ? (
-					<Empty>
-						<h3>There're no breeds... </h3>
-						<h2>Create your own!</h2>
-						<img alt='looking...' src='/assets/loading-smell.gif' />
-					</Empty>
+                    status === 'OK' ? <EmptyData /> : <ErrorMessage msg={status} />
 				) : (
 					<>
 						{page.map((dog) => (
@@ -69,12 +68,4 @@ const Container = styled.div`
 	flex-wrap: wrap;
 	justify-content: center;
     gap: 20px;
-`
-const Empty = styled.div`
-	width: 100%;
-	text-align: center;
-	& img {
-		width: 400px;
-		border-radius: 5px;
-	}
 `

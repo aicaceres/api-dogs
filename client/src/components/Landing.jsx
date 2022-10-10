@@ -11,8 +11,8 @@ export default function Landing() {
 			<Intro>
 				<h1>Dogs Breeds</h1>
 
-				<div class='box-1' onClick={handleClick}>
-					<div class='btn btn-one'>
+				<div className='box-1' onClick={handleClick}>
+					<div className='btn btn-one'>
 						<span>START</span>
 					</div>
 				</div>

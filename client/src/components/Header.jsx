@@ -1,30 +1,31 @@
 import React from "react"
 import styled from "styled-components"
-import { Sort } from './SvgIcons'
+import { Sort } from "./SvgIcons"
 // redux
-import { getBySource, setOrder } from "../redux/dogSlice"
-import { setSelected } from "../redux/temperamentSlice"
+import { getBySource, getByOrden, searchByName } from "../redux/dogSlice"
 import { useDispatch, useSelector } from "react-redux"
 
 export default function Header() {
 	const dispatch = useDispatch()
-	const { source } = useSelector((state) => state.dogs)
-	const { order } = useSelector((state) => state.dogs)
+	const { source, order, searchName } = useSelector((state) => state.dogs)
 
-	const handleOrder = (e) => {
-		const { name: type, value: direction } = e.currentTarget
-		dispatch(setOrder({ type, direction }))
+	const handleOrder = ({ currentTarget }) => {
+		const newOrder = {}
+		newOrder[currentTarget.name] = currentTarget.value
+		dispatch(getByOrden(newOrder))
 	}
 
 	const handleSourceFilter = (source) => {
 		dispatch(getBySource(source))
-		dispatch(setSelected(0))
 	}
 
 	return (
 		<HeaderContainer>
 			<div>
-				<h1>DOGS</h1>
+				<h1>
+					DOGS
+					{searchName ? <span> [ {searchName} ]</span> : ""}
+				</h1>
 			</div>
 
 			<div>
@@ -69,21 +70,23 @@ export default function Header() {
 			<div>
 				<button
 					title='Alphabetic order'
-					name='ALPHABETIC'
+                    name='ALPHABETIC'
+                    className={order.ALPHABETIC ? 'active' : '' }
 					value={order["ALPHABETIC"] === "ASC" ? "DESC" : "ASC"}
 					onClick={handleOrder}
-                >
-                    <Sort order={order["ALPHABETIC"]} />
+				>
+					<Sort order={order["ALPHABETIC"]} />
 					<span>Alphabetic</span>
 				</button>
 
 				<button
 					title='Order by weight'
-					name='WEIGHT'
+                    name='WEIGHT'
+                    className={order.WEIGHT ? 'active' : '' }
 					value={order["WEIGHT"] === "ASC" ? "DESC" : "ASC"}
 					onClick={handleOrder}
-                >
-                    <Sort order={order["WEIGHT"]} />
+				>
+					<Sort order={order["WEIGHT"]} />
 					<span>Weight</span>
 				</button>
 			</div>
@@ -106,13 +109,17 @@ const HeaderContainer = styled.div`
 		display: inline-flex;
 		align-items: center;
 		cursor: pointer;
-		& span {
+        color:grey;
+        &.active{
+            color:inherit;
+        }
+		span {
 			margin-left: 2px;
 		}
 	}
 
 	.radio-input {
-        font-family: 'Epilogue';
+		font-family: "Epilogue";
 		position: relative;
 		padding: 3px 0px 0px 42px;
 		display: inline;

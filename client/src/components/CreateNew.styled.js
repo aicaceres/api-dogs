@@ -55,6 +55,7 @@ const Create = styled.div`
 			form {
 				color: #555;
 				font-family: "Raleway", sans-serif;
+				position: relative;
 				.card-btn {
 					width: 100%;
 					margin-top: 28px;
@@ -76,37 +77,29 @@ const Create = styled.div`
 						background-color: #6dc264;
 						cursor: pointer;
 						outline: none;
+						transition: all 400ms ease-in-out;
 						&:hover {
 							background-color: #a6d4a0;
 							cursor: pointer;
 						}
-                        &:disabled{
-
-                        }
+						&:disabled {
+							pointer-events: none;
+						}
 						&.cancel {
 							background-color: #aaa;
 							&:hover {
 								background-color: #ccc;
 							}
 						}
-                        &.error{
-                            background-color:red;
-                        }
-
+						&.error {
+							background-color: red;
+						}
+						&.success {
+							width: 80px;
+							transform: rotate(360deg);
+						}
 					}
 				}
-.status_message {
-
-	color: white;
-	font-size: 14px;
-	top: 40%;
-	left: 35%;
-	position: fixed;
-	background-color: red;
-	padding: 10px 150px;
-	z-index: 9;
-
-	}
 			}
 		}
 	}
@@ -132,16 +125,16 @@ export const Input = styled.div`
 		transition: all 0.3s;
 	}
 	.input_error {
-		color: rgb(255, 69, 0, 0.5);
+		color: rgb(255, 69, 0, 0.8);
 		font-size: 11px;
 		position: absolute;
-		bottom: 5px;
+		top: 0;
 		right: 10px;
 		&.select {
 			right: 40px;
 		}
 	}
-	.input_measure {
+	.label_measure {
 		font-size: 14px;
 		color: #8597a3;
 		position: absolute;

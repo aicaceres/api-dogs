@@ -3,14 +3,11 @@ import { useParams, useHistory } from "react-router-dom"
 import styled from "styled-components"
 import NavBar from "./NavBar"
 import Loading from "./Loading"
+import ErrorMessage from "./ErrorMessage"
+import EmptyData from "./EmptyData"
 // redux
 import { useDispatch, useSelector } from "react-redux"
-import {
-	clearDetail,
-	searchById,
-    clearStatus,
-    fetchAllDogs,
-} from "../redux/dogSlice"
+import { clearDetail, searchById } from "../redux/dogSlice"
 
 export default function Detail() {
 	const dispatch = useDispatch()
@@ -20,13 +17,13 @@ export default function Detail() {
 	useEffect(() => {
 		dispatch(searchById(id))
 		return () => {
-			dispatch(clearDetail())
+            dispatch(clearDetail())
 		}
 	}, [dispatch, id])
 
-	const { detail: dog, loading } = useSelector((state) => state.dogs)
+	const { detail: dog, loading, status } = useSelector((state) => state.dogs)
 
-	//text for weight
+	//format text for weight
 	let weightTxt = " - - "
 	if (dog.weightMin && dog.weightMax) {
 		weightTxt = dog.weightMin + " - " + dog.weightMax + " Kg"
@@ -38,7 +35,7 @@ export default function Detail() {
 			weightTxt = (dog.weightMin ? dog.weightMin : dog.weightMax) + " Kg"
 		}
 	}
-	//text for height
+	//format text for height
 	let heightTxt = " - - "
 	if (dog.heightMin && dog.heightMax) {
 		heightTxt = dog.heightMin + " - " + dog.heightMax + " Cm"
@@ -56,14 +53,16 @@ export default function Detail() {
 			<NavBar search={false} />
 
 			{loading ? (
-				<Loading />
+                <Loading />
+
+			) : !dog.name ? (
+				status === 'OK' || status === '' ? <EmptyData /> : <ErrorMessage msg={status} />
 			) : (
 				<CardDetail>
 					<div className='card-img'>
 						<img src={dog.image} alt={dog.name} />
 					</div>
 					<div className='card-body'>
-
 						<div className='card-info'>
 							<h1>{dog.name}</h1>
 							<h2>

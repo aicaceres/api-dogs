@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 
 // reducers
-import { setSelected, fetchAllTemperaments } from "../redux/temperamentSlice"
-import { getByTemperament, searchByName, setSource } from "../redux/dogSlice"
+import { fetchAllTemperaments } from "../redux/temperamentSlice"
+import { getByTemperament, searchByName } from "../redux/dogSlice"
 
 export default function Search() {
 	const dispatch = useDispatch()
@@ -28,9 +28,7 @@ export default function Search() {
 		  })
 		: []
 	const selectHandleOnChange = ({ target }) => {
-		dispatch(setSelected(target.value))
-        dispatch(getByTemperament(target.value))
-        dispatch(setSource('ALL'))
+		dispatch(getByTemperament(target.value))
 	}
 
 	useEffect(() => {

@@ -1,4 +1,4 @@
-export const Sort = ({ order }) => {
+export const Sort = ({ order = 'ASC' }) => {
 	// SVG icons for sort
 	const icon = {
 		ASC: "M2 3.75A.75.75 0 012.75 3h11.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zM2 7.5a.75.75 0 01.75-.75h7.508a.75.75 0 010 1.5H2.75A.75.75 0 012 7.5zM14 7a.75.75 0 01.75.75v6.59l1.95-2.1a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 111.1-1.02l1.95 2.1V7.75A.75.75 0 0114 7zM2 11.25a.75.75 0 01.75-.75h4.562a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z",
@@ -62,26 +62,6 @@ export const Clock = () => {
 				clip-rule='evenodd'
 				d='M11.5 12V5H12.5V11.5H19V12.5H12C11.7239 12.5 11.5 12.2761 11.5 12Z'
 				fill-rule='evenodd'
-			/>
-		</svg>
-	)
-}
-
-export const Trash = () => {
-	return (
-		<svg
-			xmlns='http://www.w3.org/2000/svg'
-			fill='none'
-			viewBox='0 0 24 24'
-			strokeWidth='1.5'
-			stroke='currentColor'
-			className='w-6 h-6'
-			width={18}
-		>
-			<path
-				strokeLinecap='round'
-				strokeLinejoin='round'
-				d='M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0'
 			/>
 		</svg>
 	)
@@ -153,13 +133,53 @@ export const DoubleRightArrow = () => {
 			viewBox='0 0 24 24'
 			strokeWidth={1.5}
 			stroke='currentColor'
-            className='w-6 h-6'
-            width={16}
+			className='w-6 h-6'
+			width={16}
 		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
 				d='M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5'
+			/>
+		</svg>
+	)
+}
+
+export const Trash = () => {
+	return (
+		<svg
+			xmlns='http://www.w3.org/2000/svg'
+			fill='none'
+			viewBox='0 0 24 24'
+			strokeWidth='1.5'
+			stroke='currentColor'
+			className='w-6 h-6'
+			width={18}
+		>
+			<path
+				strokeLinecap='round'
+				strokeLinejoin='round'
+				d='M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0'
+			/>
+		</svg>
+	)
+}
+
+export const CheckOK = () => {
+	return (
+		<svg
+			xmlns='http://www.w3.org/2000/svg'
+			fill='none'
+			viewBox='0 0 24 24'
+			strokeWidth={4}
+			stroke='currentColor'
+            className='w-6 h-6'
+            width={26}
+		>
+			<path
+				strokeLinecap='round'
+				strokeLinejoin='round'
+				d='M4.5 12.75l6 6 9-13.5'
 			/>
 		</svg>
 	)

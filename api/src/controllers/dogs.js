@@ -31,8 +31,8 @@ const getApiData = async () => {
 			return result
 		})
 	} catch (error) {
-		console.error("getApiData: ", error)
-		return error
+		console.error("getApiData: ", error.message)
+		throw new Error(error.message)
 	}
 }
 
@@ -73,8 +73,8 @@ const getDbData = async () => {
 			return []
 		}
 	} catch (error) {
-		console.error("getDbData: ", error)
-		return error
+		console.error("getDbData: ", error.message)
+		throw new Error(error.message)
 	}
 }
 
@@ -101,8 +101,8 @@ const getByIdRaza = async (idRaza) => {
 		const dog = data.find((d) => d.id.toString() === idRaza.toString())
 		return dog || {}
 	} catch (error) {
-		console.error("getByIdRaza: ", error)
-		return error
+		console.error("getByIdRaza: ", error.message)
+		throw new Error(error.message)
 	}
 }
 
@@ -145,11 +145,10 @@ const addNewBreed = async ({
 					await newDog.addTemperament(temp.id)
 			  })
 			: []
-
 		return newDog
 	} catch (error) {
-		console.error("addNewBreed: ", error)
-		return error
+		console.error("addNewBreed: ", error.message)
+		throw new Error(error.message)
 	}
 }
 
@@ -165,7 +164,7 @@ const deleteDbBreed = async (id) => {
 		return res
 	} catch (error) {
 		console.error("deleteDbBreed: ", error.message)
-		return error
+		throw new Error(error.message)
 	}
 }
 

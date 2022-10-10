@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux"
 
 function NavBar({ search }) {
 	const dispatch = useDispatch()
-	const handleClearAll = () => {
+	const handleLogOut = () => {
 		dispatch(clearTemperaments())
 		dispatch(clearDogs())
 	}
@@ -26,7 +26,7 @@ function NavBar({ search }) {
 				</>
 			)}
 
-			<Link className="navlink" to='/' onClick={handleClearAll}>
+			<Link className="navlink" to='/' onClick={handleLogOut}>
 				Landing Page
 			</Link>
 		</Navigation>
