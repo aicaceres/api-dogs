@@ -9,7 +9,7 @@ import { getByTemperament, searchByName } from "../redux/dogSlice"
 export default function Search() {
 	const dispatch = useDispatch()
 	const temperaments = useSelector((state) => state.temperaments.list)
-	const selected = useSelector((state) => state.temperaments.selected)
+	const selected = useSelector((state) => state.dogs.selectedTemperament)
 	// search input
 	const [input, setInput] = useState("")
 	const handleInput = ({ target }) => {

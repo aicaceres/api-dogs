@@ -37,20 +37,19 @@ export default function CreateNew() {
 	// lifeSpan
 	const lifeSpanMin = useRef()
 	const lifeSpanMax = useRef()
-	const status = useSelector((state) => state.dogs.status)
+	let status = useSelector((state) => state.dogs.status)
 
 	// TEMPERAMENTS
 	useEffect(() => {
-		if (status === "") {
-			dispatch(fetchAllTemperaments())
-			lifeSpanMin.current.scrollIntoView()
-		} else if (status !== "OK") {
-			// clean ERROR
+		if (status) {
+			// show and clean ERROR
 			setTimeout(() => {
-				dispatch(setStatus(''))
+				dispatch(setStatus(""))
 			}, 4000)
 		}
-	}, [dispatch, status, history])
+		dispatch(fetchAllTemperaments())
+		lifeSpanMin.current.scrollIntoView()
+	}, [dispatch, status])
 
 	const temperaments = useSelector((state) => state.temperaments.list)
 	const options = temperaments
@@ -90,8 +89,8 @@ export default function CreateNew() {
 			...state,
 			[target.name]: target.value,
 			lifeSpan: lifespan,
-        }))
-        setError(validate(field))
+		}))
+		setError(validate(field))
 	}
 	// handle errors
 	const handleBlur = () => {
@@ -115,18 +114,18 @@ export default function CreateNew() {
 		const valid = validate(field)
 		const isError = Object.values(valid).filter((err) => err !== "").length
 		// if no local errors submit
-        if (isError === 0) {
-            const response = await dispatch(postNewBreed(field))
-            if (response) {
-                setField((state) => ({
-                    ...state,
-                    id: response.id,
-                }))
-                setTimeout(() => {
-                    dispatch(setStatus(''))
-                    history.push(`/detail/${response.id}`)
-                }, 2000)
-            }
+		if (isError === 0) {
+			const response = await dispatch(postNewBreed(field))
+			if (response) {
+				setField((state) => ({
+					...state,
+					id: response.id,
+				}))
+				setTimeout(() => {
+					dispatch(setStatus(""))
+					history.push(`/detail/${response.id}`)
+				}, 2000)
+			}
 		} else {
 			setError(valid)
 		}
@@ -157,11 +156,7 @@ export default function CreateNew() {
 					<div className='card-text'>
 						<h1>Create your breed</h1>
 						<form onSubmit={handleSubmit} noValidate>
-							{status !== "OK" && status !== "" ? (
-								<ErrorMessage msg={status} />
-							) : (
-								""
-							)}
+							{status && status !=='OK' ? <ErrorMessage msg={status} /> : ""}
 							<Input>
 								<input
 									type='text'
@@ -338,18 +333,22 @@ export default function CreateNew() {
 									type='button'
 									onClick={() => history.goBack()}
 								>
-									{status === "" ? "Cancel" : "Return"}
+									{status === "OK" ? "Return" : "Cancel"}
 								</button>
 								<button
-									className={status === "OK" ? "success" : status !== "" ? "error" : ""}
+									className={
+										status === "OK" ? "success" : status !== "" ? "error" : ""
+									}
 									disabled={status === "OK"}
 									type='submit'
 								>
-									{status === ""
-										? "Save"
-										: status === "OK"
-										? <CheckOK/>
-										: "Error!"}
+									{status === "" ? (
+										"Save"
+									) : status === "OK" ? (
+										<CheckOK />
+									) : (
+										"Error!"
+									)}
 								</button>
 							</div>
 						</form>

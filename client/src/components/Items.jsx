@@ -11,12 +11,13 @@ import Pagination from "./Pagination"
 
 export default function Items() {
 	const dispatch = useDispatch()
-	const {
-		list,
+    const {
+        list,
 		filtered: dogs,
 		currentPage,
         loading,
         status,
+        searchName,
 	} = useSelector((state) => state.dogs)
 
 	// pagination
@@ -26,14 +27,14 @@ export default function Items() {
 	const page = dogs.slice(firstIdx, lastIdx)
 
 	useEffect(() => {
-		if (!list.length) {
+        if (!list.length && !searchName) {
 			dispatch(fetchAllDogs())
-		}
-	}, [dispatch, list])
+        }
+	}, [dispatch, list, searchName])
 
 	const handlePageChange = (pageNumber) => {
 		dispatch(setCurrentPage(pageNumber))
-	}
+    }
 
 	return (
 		<>
@@ -41,7 +42,7 @@ export default function Items() {
 				{loading ? (
 					<Loading />
 				) : !dogs.length ? (
-                    status === 'OK' ? <EmptyData /> : <ErrorMessage msg={status} />
+                    status ? <ErrorMessage msg={status} /> : <EmptyData />
 				) : (
 					<>
 						{page.map((dog) => (

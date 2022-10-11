@@ -47,7 +47,8 @@ export default function Detail() {
 		) {
 			heightTxt = (dog.heightMin ? dog.heightMin : dog.heightMax) + " Cm"
 		}
-	}
+    }
+    const placeholder = '/assets/placeholder_dog.png'
 
 	return (
 		<div>
@@ -57,11 +58,11 @@ export default function Detail() {
                 <Loading />
 
 			) : !dog.name ? (
-				status === 'OK' || status === '' ? <NotFound404 /> : <ErrorMessage msg={status} />
+				status ? <ErrorMessage msg={status} /> : <NotFound404 />
 			) : (
 				<CardDetail>
 					<div className='card-img'>
-						<img src={dog.image} alt={dog.name} />
+						<img src={dog.image ?? placeholder} alt={dog.name} />
 					</div>
 					<div className='card-body'>
 						<div className='card-info'>

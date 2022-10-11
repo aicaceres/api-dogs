@@ -42,7 +42,7 @@ const dogSlice = createSlice({
 			return {
 				...initialState,
 				list: action.payload,
-				filtered: action.payload,
+                filtered: action.payload,
 				loading: false,
 			}
 		},
@@ -54,7 +54,7 @@ const dogSlice = createSlice({
 		setDetail(state, action) {
 			state.detail = action.payload
 			state.loading = false
-			state.status = "OK"
+			state.status = ""
 		},
 		clearDetail(state) {
 			state.detail = {}
@@ -87,12 +87,11 @@ const dogSlice = createSlice({
 					? filtered
 					: filtered.filter((d) =>
 							d.temperament.includes(state.selectedTemperament)
-					  )
+					    )
 
 			state.filtered = filtered
 			state.loading = false
 			state.currentPage = 1
-			state.status = "OK"
 		},
 
 		applyOrder(state) {
@@ -140,11 +139,13 @@ export const getByOrden = (order) => {
 export const getBySource = (source) => {
 	return (dispatch) => {
 		try {
-			dispatch(setSource(source))
+            dispatch(setSource(source))
 			dispatch(applyFilters())
 			dispatch(applyOrder())
+            dispatch(setStatus(''))
 		} catch (error) {
-			console.error("getByTemperament:", error.message)
+            console.error("getByTemperament:", error.message)
+            dispatch(setStatus(error.message))
 		}
 	}
 }
@@ -155,9 +156,11 @@ export const getByTemperament = (selected) => {
 		try {
 			dispatch(setSelectedTemperament(selected))
 			dispatch(applyFilters())
-			dispatch(applyOrder())
+            dispatch(applyOrder())
+            dispatch(setStatus(''))
 		} catch (error) {
-			console.error("getByTemperament:", error.message)
+            console.error("getByTemperament:", error.message)
+            dispatch(setStatus(error.message))
 		}
 	}
 }
@@ -185,7 +188,7 @@ export const searchByName = (name) => {
 			)
 			dispatch(setAllDogs(data))
 			dispatch(setSearchName(name))
-			dispatch(applyFilters(data))
+            dispatch(applyFilters(data))
 		} catch (error) {
 			console.error("searchByName: ", error.message)
 			dispatch(setStatus(error.message))
@@ -213,7 +216,7 @@ export const postNewBreed = (formData) => {
 				"http://localhost:3001/dogs",
 				formData
 			)
-			dispatch(setLoading(true))
+			// dispatch(setLoading(true))
 			const { data } = await axios.get("http://localhost:3001/dogs")
 			dispatch(setAllDogs(data))
 			dispatch(setStatus("OK"))

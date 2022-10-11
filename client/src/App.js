@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import Home from './components/Home'
 import Landing from './components/Landing'
 import CreateForm from './components/CreateNew'
@@ -8,21 +8,24 @@ import NotFound404 from './components/NotFound404'
 
 function App() {
   return (
-    <>
+    <Switch>
         <Route exact path='/'>
             <Landing />
         </Route>
-        <Route exact path='/breeds'>
+        <Route path='/breeds'>
             <Home/>
         </Route>
-        <Route exact path='/newBreed'>
-            <CreateForm/>
-        </Route>
-        <Route exact path='/detail/:id'>
+        <Route path='/detail/:id'>
             <Detail/>
           </Route>
-        <Route path='*' component={NotFound404} />
-    </>
+        <Route path='/newBreed'>
+            <CreateForm/>
+        </Route>
+        <Route path="*">
+            <NotFound404 />
+          </Route>
+
+    </Switch>
   );
 }
 

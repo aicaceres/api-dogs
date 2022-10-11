@@ -6,7 +6,7 @@ export default function NotFound404() {
 	return (
 		<Empty>
             <h2>Ups! something go wrong</h2>
-            <h3><Link to='/'>Back go home</Link> </h3>
+            <h3><Link to='/breeds'>Back to home</Link> </h3>
 			<img alt='looking...' src='/assets/loading-ballon.gif' />
 		</Empty>
 	)

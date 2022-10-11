@@ -18,13 +18,14 @@ export default function Item({
 		if ((weightMin && !weightMax) || (!weightMin && weightMax)) {
 			weightTxt = (weightMin ? weightMin : weightMax) + " Kg"
 		}
-	}
+    }
+    const placeholder = '/assets/placeholder_dog.png'
 	return (
 		<Card>
 			<Link to={`/detail/${id}`}>
 				<div className='card'>
 					<div className='card-header'>
-						<img src={image} alt={name} loading='lazy' />
+						<img src={image ?? placeholder} alt={name} loading='lazy' />
 					</div>
 					<div className='card-body'>
 						<h4>{name}</h4>
