@@ -35,7 +35,7 @@ const validate = (field) => {
 		: ""
 
 	// validate the range between MIN and MAX
-	const msgRange = "Min must not be greater than Max"
+	const msgRange = "Min must be lower than Max"
 	if (
 		field.weightMin &&
 		field.weightMax &&

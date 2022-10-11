@@ -90,7 +90,8 @@ export default function CreateNew() {
 			...state,
 			[target.name]: target.value,
 			lifeSpan: lifespan,
-		}))
+        }))
+        setError(validate(field))
 	}
 	// handle errors
 	const handleBlur = () => {

@@ -4,6 +4,7 @@ import Home from './components/Home'
 import Landing from './components/Landing'
 import CreateForm from './components/CreateNew'
 import Detail from './components/Detail';
+import NotFound404 from './components/NotFound404'
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
         </Route>
         <Route exact path='/detail/:id'>
             <Detail/>
-        </Route>
+          </Route>
+        <Route path='*' component={NotFound404} />
     </>
   );
 }

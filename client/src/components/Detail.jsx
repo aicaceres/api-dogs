@@ -4,10 +4,11 @@ import styled from "styled-components"
 import NavBar from "./NavBar"
 import Loading from "./Loading"
 import ErrorMessage from "./ErrorMessage"
-import EmptyData from "./EmptyData"
+import NotFound404 from "./NotFound404"
 // redux
 import { useDispatch, useSelector } from "react-redux"
 import { clearDetail, searchById } from "../redux/dogSlice"
+
 
 export default function Detail() {
 	const dispatch = useDispatch()
@@ -56,7 +57,7 @@ export default function Detail() {
                 <Loading />
 
 			) : !dog.name ? (
-				status === 'OK' || status === '' ? <EmptyData /> : <ErrorMessage msg={status} />
+				status === 'OK' || status === '' ? <NotFound404 /> : <ErrorMessage msg={status} />
 			) : (
 				<CardDetail>
 					<div className='card-img'>
