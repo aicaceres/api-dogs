@@ -169,7 +169,7 @@ export const fetchAllDogs = () => {
 	return async (dispatch) => {
 		try {
 			dispatch(setLoading(true))
-			const { data } = await axios.get("http://localhost:3001/dogs")
+			const { data } = await axios.get("/dogs")
 			dispatch(setAllDogs(data))
 			dispatch(setSearchName(""))
 		} catch (error) {
@@ -184,7 +184,7 @@ export const searchByName = (name) => {
 		try {
 			dispatch(setLoading(true))
 			const { data } = await axios.get(
-				`http://localhost:3001/dogs?name=${name}`
+				`/dogs?name=${name}`
 			)
 			dispatch(setAllDogs(data))
 			dispatch(setSearchName(name))
@@ -200,7 +200,7 @@ export const searchById = (id) => {
 	return async (dispatch) => {
 		try {
 			dispatch(setLoading(true))
-			const { data } = await axios.get(`http://localhost:3001/dogs/${id}`)
+			const { data } = await axios.get(`/dogs/${id}`)
 			dispatch(setDetail(data))
 		} catch (error) {
 			console.error("searchById:", error.message)
@@ -213,11 +213,11 @@ export const postNewBreed = (formData) => {
 	return async (dispatch) => {
 		try {
 			const { data: dogCreated } = await axios.post(
-				"http://localhost:3001/dogs",
+				"/dogs",
 				formData
 			)
 			// dispatch(setLoading(true))
-			const { data } = await axios.get("http://localhost:3001/dogs")
+			const { data } = await axios.get("/dogs")
 			dispatch(setAllDogs(data))
 			dispatch(setStatus("OK"))
 			return dogCreated
