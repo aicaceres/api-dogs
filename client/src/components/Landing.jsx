@@ -1,20 +1,20 @@
 import React from "react"
 import styled from "styled-components"
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom"
 export default function Landing() {
-    const history = useHistory()
-    const handleClick = () => {
-        history.push('/breeds')
-    }
+	const history = useHistory()
+	const handleClick = () => {
+		history.push("/breeds")
+	}
 	return (
 		<LandingContainer>
 			<Intro>
 				<h1>Dogs Breeds</h1>
 
-				<div className='box-1' onClick={handleClick}>
-					<div className='btn btn-one'>
+				<div onClick={handleClick}>
+					<LaunchButton>
 						<span>START</span>
-					</div>
+					</LaunchButton>
 				</div>
 			</Intro>
 		</LandingContainer>
@@ -47,23 +47,21 @@ const Intro = styled.div`
 	h1 {
 		margin: 10px 10px 20px;
 	}
-	.btn {
-		line-height: 50px;
-		height: 50px;
-		text-align: center;
-		width: 250px;
-		cursor: pointer;
-        font-family: 'Epilogue';
-	}
-	.btn-one {
-		color: #fff;
-		transition: all 0.3s;
-		position: relative;
-	}
-	.btn-one span {
+`
+const LaunchButton = styled.div`
+	line-height: 50px;
+	height: 50px;
+	text-align: center;
+	width: 250px;
+	cursor: pointer;
+	font-family: "Epilogue";
+	color: #fff;
+	transition: all 0.3s;
+	position: relative;
+	span {
 		transition: all 0.3s;
 	}
-	.btn-one::before {
+	&::before {
 		content: "";
 		position: absolute;
 		bottom: 0;
@@ -81,14 +79,14 @@ const Intro = styled.div`
 		border-bottom-color: rgba(255, 255, 255, 0.5);
 		transform: scale(0.1, 1);
 	}
-	.btn-one:hover span {
-		letter-spacing: 2px;
-	}
-	.btn-one:hover::before {
+	&:hover::before {
 		opacity: 1;
 		transform: scale(1, 1);
 	}
-	.btn-one::after {
+	&:hover span {
+		letter-spacing: 2px;
+	}
+	&::after {
 		content: "";
 		position: absolute;
 		bottom: 0;
@@ -99,9 +97,8 @@ const Intro = styled.div`
 		transition: all 0.3s;
 		background-color: rgba(255, 255, 255, 0.1);
 	}
-	.btn-one:hover::after {
+	&:hover::after {
 		opacity: 0;
 		transform: scale(0.1, 1);
 	}
-
 `

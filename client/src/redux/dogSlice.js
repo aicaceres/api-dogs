@@ -42,7 +42,7 @@ const dogSlice = createSlice({
 			return {
 				...initialState,
 				list: action.payload,
-                filtered: action.payload,
+				filtered: action.payload,
 				loading: false,
 			}
 		},
@@ -87,7 +87,7 @@ const dogSlice = createSlice({
 					? filtered
 					: filtered.filter((d) =>
 							d.temperament.includes(state.selectedTemperament)
-					    )
+					  )
 
 			state.filtered = filtered
 			state.loading = false
@@ -139,13 +139,13 @@ export const getByOrden = (order) => {
 export const getBySource = (source) => {
 	return (dispatch) => {
 		try {
-            dispatch(setSource(source))
+			dispatch(setSource(source))
 			dispatch(applyFilters())
 			dispatch(applyOrder())
-            dispatch(setStatus(''))
+			dispatch(setStatus(""))
 		} catch (error) {
-            console.error("getByTemperament:", error.message)
-            dispatch(setStatus(error.message))
+			console.error("getByTemperament:", error.message)
+			dispatch(setStatus(error.message))
 		}
 	}
 }
@@ -156,11 +156,11 @@ export const getByTemperament = (selected) => {
 		try {
 			dispatch(setSelectedTemperament(selected))
 			dispatch(applyFilters())
-            dispatch(applyOrder())
-            dispatch(setStatus(''))
+			dispatch(applyOrder())
+			dispatch(setStatus(""))
 		} catch (error) {
-            console.error("getByTemperament:", error.message)
-            dispatch(setStatus(error.message))
+			console.error("getByTemperament:", error.message)
+			dispatch(setStatus(error.message))
 		}
 	}
 }
@@ -183,12 +183,10 @@ export const searchByName = (name) => {
 	return async (dispatch) => {
 		try {
 			dispatch(setLoading(true))
-			const { data } = await axios.get(
-				`/dogs?name=${name}`
-			)
+			const { data } = await axios.get(`/dogs?name=${name}`)
 			dispatch(setAllDogs(data))
 			dispatch(setSearchName(name))
-            dispatch(applyFilters(data))
+			dispatch(applyFilters(data))
 		} catch (error) {
 			console.error("searchByName: ", error.message)
 			dispatch(setStatus(error.message))
@@ -212,11 +210,7 @@ export const searchById = (id) => {
 export const postNewBreed = (formData) => {
 	return async (dispatch) => {
 		try {
-			const { data: dogCreated } = await axios.post(
-				"/dogs",
-				formData
-			)
-			// dispatch(setLoading(true))
+			const { data: dogCreated } = await axios.post("/dogs", formData)
 			const { data } = await axios.get("/dogs")
 			dispatch(setAllDogs(data))
 			dispatch(setStatus("OK"))
@@ -237,9 +231,8 @@ export const postNewBreed = (formData) => {
 // export const deleteBreed = (id) => {
 // 	return async (dispatch) => {
 // 		try {
-//             dispatch(setLoading(true))
 // 			const { data } = await axios.delete(`http://localhost:3001/dogs/${id}`)
-//             await dispatch(setAllDogs(data))
+//
 //             await dispatch(setStatus('OK'))
 //         } catch (error) {
 //             dispatch(setStatus(error.message))

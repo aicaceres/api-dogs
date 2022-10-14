@@ -13,7 +13,7 @@ export default function EmptyData() {
 const Empty = styled.div`
 	width: 100%;
 	text-align: center;
-	& img {
+	img {
 		width: 400px;
 		border-radius: 5px;
 	}

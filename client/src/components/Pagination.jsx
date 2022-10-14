@@ -41,54 +41,54 @@ export default function Pagination({
 		.map((d, i) => i + firstNumber)
 
 	return (
-		<PaginationContainer>
-			<li
+		<Container>
+			<Li
 				onClick={() => handleChange(1)}
 				className={currentPage === 1 ? "disabled" : ""}
 				title='First Page'
 			>
 				<DoubleLeftArrow />
-			</li>
-			<li
+			</Li>
+			<Li
 				onClick={() => handleChange(currentPage - 1)}
 				className={currentPage === 1 ? "disabled" : ""}
 				title='Previous'
 			>
 				<LeftArrow />
-			</li>
+			</Li>
 
 			{pageNumbers.map((number) => {
 				return (
-					<li
+					<Li
 						key={number}
 						className={currentPage === number ? "selected" : ""}
 						onClick={() => handleChange(number)}
 					>
 						{number}
-					</li>
+					</Li>
 				)
 			})}
 
-			<li
+			<Li
 				onClick={() => handleChange(currentPage + 1)}
 				className={pagesCount === currentPage ? "disabled" : ""}
 				title='Next'
 			>
 				<RightArrow />
-			</li>
-			<li
+			</Li>
+			<Li
 				onClick={() => handleChange(pagesCount)}
 				className={pagesCount === currentPage ? "disabled" : ""}
 				title='Last Page'
 			>
 				<DoubleRightArrow />
-			</li>
-		</PaginationContainer>
+			</Li>
+		</Container>
 	)
 }
 
 // Styled components
-const PaginationContainer = styled.ul`
+const Container = styled.ul`
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -96,36 +96,34 @@ const PaginationContainer = styled.ul`
 	padding: 0;
 	margin-top: 20px;
 	margin-bottom: 50px;
-	& li {
-		padding: 0 12px;
-		height: 32px;
-		text-align: center;
-		margin: auto 4px;
-		color: rgba(0, 0, 0, 0.87);
-		display: flex;
-		box-sizing: border-box;
-		align-items: center;
-		letter-spacing: 0.01071em;
-		border-radius: 16px;
-		line-height: 1.43;
-		font-size: 13px;
-		min-width: 32px;
-		cursor: pointer;
+`
+const Li = styled.li`
+	padding: 0 12px;
+	height: 32px;
+	text-align: center;
+	margin: auto 4px;
+	color: rgba(0, 0, 0, 0.87);
+	display: flex;
+	box-sizing: border-box;
+	align-items: center;
+	letter-spacing: 0.01071em;
+	border-radius: 16px;
+	line-height: 1.43;
+	font-size: 13px;
+	min-width: 32px;
+	cursor: pointer;
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.04);
+	}
+	&.selected {
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+	&.disabled {
+		pointer-events: none;
+		color: rgba(0, 0, 0, 0.43);
 		&:hover {
-			background-color: rgba(0, 0, 0, 0.04);
-		}
-		&.selected {
-			background-color: rgba(0, 0, 0, 0.2);
-		}
-
-		&.disabled {
-			pointer-events: none;
-			color: rgba(0, 0, 0, 0.43);
-
-			&:hover {
-				background-color: transparent;
-				cursor: default;
-			}
+			background-color: transparent;
+			cursor: default;
 		}
 	}
 `

@@ -15,7 +15,7 @@ export default function NotFound404() {
 const Empty = styled.div`
 	width: 100%;
 	text-align: center;
-	& img {
+	img {
 		width: 400px;
 		border-radius: 5px;
 	}

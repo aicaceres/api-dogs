@@ -35,8 +35,8 @@ const getTemperamentData = async () => {
 			return temperamentsInserted
 		}
     } catch (error) {
-        console.error('getTemperamentData: ', error)
-		return error
+        console.error('getTemperamentData: ', error.message)
+		throw new Error(error.message)
 	}
 }
 

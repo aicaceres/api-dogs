@@ -4,16 +4,16 @@ import styled from "styled-components"
 export default function Logo() {
 
 	return (
-		<LogoContainer>
+		<Container>
 			<a href='/breeds'>
 				<img alt='.' src='/assets/logotemp.png' />
 				<span>Breeds</span>
             </a>
-		</LogoContainer>
+		</Container>
 	)
 }
 
-const LogoContainer = styled.div`
+const Container = styled.div`
 	a {
 		text-decoration: none;
 		display: flex;

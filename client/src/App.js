@@ -12,19 +12,18 @@ function App() {
         <Route exact path='/'>
             <Landing />
         </Route>
-        <Route path='/breeds'>
+        <Route exact path='/breeds'>
             <Home/>
         </Route>
-        <Route path='/detail/:id'>
+        <Route exact path='/detail/:id'>
             <Detail/>
           </Route>
-        <Route path='/newBreed'>
+        <Route exact path='/newBreed'>
             <CreateForm/>
         </Route>
         <Route path="*">
             <NotFound404 />
           </Route>
-
     </Switch>
   );
 }

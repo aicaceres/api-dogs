@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { Sort } from "./SvgIcons"
 // redux
-import { getBySource, getByOrden, searchByName } from "../redux/dogSlice"
+import { getBySource, getByOrden } from "../redux/dogSlice"
 import { useDispatch, useSelector } from "react-redux"
 
 export default function Header() {
@@ -102,7 +102,7 @@ const HeaderContainer = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	padding: 10px 80px;
-	& button {
+	button {
 		border: none;
 		margin: 4px;
 		padding: 10px;
