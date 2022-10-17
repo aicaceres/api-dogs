@@ -231,7 +231,7 @@ export const postNewBreed = (formData) => {
 // export const deleteBreed = (id) => {
 // 	return async (dispatch) => {
 // 		try {
-// 			const { data } = await axios.delete(`http://localhost:3001/dogs/${id}`)
+// 			const { data } = await axios.delete(/dogs/${id}`)
 //
 //             await dispatch(setStatus('OK'))
 //         } catch (error) {

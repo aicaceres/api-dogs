@@ -23,7 +23,7 @@ const temperamentSlice = createSlice({
 export const fetchAllTemperaments = () => {
     return async (dispatch) => {
         try {
-            const { data } = await axios.get("http://localhost:3001/temperaments")
+            const { data } = await axios.get("/temperaments")
             dispatch(setAllTemperaments(data))
         } catch (error) {
             console.log(error.message)
