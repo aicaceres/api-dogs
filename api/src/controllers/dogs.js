@@ -1,6 +1,6 @@
 const axios = require("axios")
 require("dotenv").config()
-const { URL_API, URL_PHOTO_API } = process.env
+const { URL_API } = process.env
 
 const { Dog, Temperament } = require("../db")
 
@@ -119,10 +119,6 @@ const addNewBreed = async ({
 	temperaments,
 }) => {
 	try {
-		if (!image) {
-			const { data } = await axios.get(URL_PHOTO_API)
-			image = data.message
-		}
 		name = name.charAt(0).toUpperCase() + name.slice(1)
 		// create new breed
 		const newDog = await Dog.create({
