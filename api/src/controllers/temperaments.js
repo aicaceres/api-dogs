@@ -13,7 +13,7 @@ const getTemperamentData = async () => {
 			return [...temperamentsDb].sort()
 		} else {
 			// get temperaments from DOG API
-			const { data } = await axios.get(URL_API)
+			const { data } = await axios.get('https://api.thedogapi.com/v1/breeds')
 
 			var temperaments = []
 			data.map((d) => {
