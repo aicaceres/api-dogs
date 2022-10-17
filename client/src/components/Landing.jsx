@@ -1,6 +1,8 @@
 import React from "react"
 import styled from "styled-components"
-import { useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
+import { Github, Linkedin } from "./SvgIcons"
+
 export default function Landing() {
 	const history = useHistory()
 	const handleClick = () => {
@@ -11,10 +13,18 @@ export default function Landing() {
 			<Intro>
 				<h1>Dogs Breeds</h1>
 
-				<div onClick={handleClick}>
-					<LaunchButton>
+				<div>
+					<LaunchButton  onClick={handleClick}>
 						<span>START</span>
 					</LaunchButton>
+					<SocialLink>
+						<a href='https://www.linkedin.com/in/alejandrainescaceres' title='LinkedIn' target='_blank' rel='noreferrer'>
+							<Linkedin />
+						</a>
+						<a href='https://github.com/aicaceres/api-dogs' title='GitHub' target='_blank' rel='noreferrer'>
+							<Github />
+						</a>
+					</SocialLink>
 				</div>
 			</Intro>
 		</LandingContainer>
@@ -42,7 +52,7 @@ const Intro = styled.div`
 	font-size: 24px;
 	bottom: 15%;
 	left: 15%;
-	padding: 30px;
+	padding: 30px 30px 10px 30px;
 	border-radius: 5px;
 	h1 {
 		margin: 10px 10px 20px;
@@ -100,5 +110,19 @@ const LaunchButton = styled.div`
 	&:hover::after {
 		opacity: 0;
 		transform: scale(0.1, 1);
+	}
+`
+const SocialLink = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+	a {
+        padding: 20px 20px 0px 20px;
+        &:hover{
+            transform: scale(1.2);
+        }
+		svg {
+			color: rgb(255, 255, 255, 0.8);
+		}
 	}
 `
