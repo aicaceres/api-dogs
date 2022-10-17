@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
 import axios from "axios"
-import dotenv from 'dotenv'
 import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { postNewBreed, setStatus } from "../redux/dogSlice"
@@ -13,9 +12,6 @@ import NavBar from "./NavBar"
 import { Clock, Camera, CheckOK } from "./SvgIcons"
 import validate from "../validate"
 import ErrorMessage from "./ErrorMessage"
-
-dotenv.config()
-const { URL_PHOTO_API } = process.env
 
 export default function CreateNew() {
 	const history = useHistory()
@@ -105,7 +101,7 @@ export default function CreateNew() {
 	// set a random photo to image
 	const getRandomImage = async () => {
 		setLoading(true)
-		const { data } = await axios.get(URL_PHOTO_API)
+		const { data } = await axios.get('https://dog.ceo/api/breeds/image/random')
 		setField((state) => ({
 			...state,
 			image: data.message,
