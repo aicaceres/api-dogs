@@ -101,7 +101,7 @@ export default function CreateNew() {
 	// set a random photo to image
 	const getRandomImage = async () => {
 		setLoading(true)
-		const { data } = await axios.get('https://dog.ceo/api/breeds/image/random')
+		const { data } = await axios.get("https://dog.ceo/api/breeds/image/random")
 		setField((state) => ({
 			...state,
 			image: data.message,
@@ -157,7 +157,7 @@ export default function CreateNew() {
 					<div className='card-text'>
 						<h1>Create your breed</h1>
 						<form onSubmit={handleSubmit} noValidate>
-							{status && status !=='OK' ? <ErrorMessage msg={status} /> : ""}
+							{status && status !== "OK" ? <ErrorMessage msg={status} /> : ""}
 							<Input>
 								<input
 									type='text'

@@ -26,7 +26,7 @@ export const fetchAllTemperaments = () => {
             const { data } = await axios.get("/temperaments")
             dispatch(setAllTemperaments(data))
         } catch (error) {
-            console.log(error.message)
+            console.error("getBySource:", error.message)
         }
 	}
 }

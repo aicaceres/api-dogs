@@ -99,7 +99,7 @@ const getByIdRaza = async (idRaza) => {
 	try {
 		const data = await getAllData()
 		const dog = data.find((d) => d.id.toString() === idRaza.toString())
-		return dog || {}
+		return dog || false
 	} catch (error) {
 		console.error("getByIdRaza: ", error.message)
 		throw new Error(error.message)

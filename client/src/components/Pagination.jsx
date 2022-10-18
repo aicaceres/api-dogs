@@ -94,8 +94,7 @@ const Container = styled.ul`
 	justify-content: center;
 	list-style-type: none;
 	padding: 0;
-	margin-top: 20px;
-	margin-bottom: 50px;
+	margin: 15px;
 `
 const Li = styled.li`
 	padding: 0 12px;

@@ -39,12 +39,12 @@ const dogSlice = createSlice({
 			state.currentPage = action.payload
 		},
 		setAllDogs(state, action) {
-			return {
-				...initialState,
-				list: action.payload,
-				filtered: action.payload,
-				loading: false,
-			}
+			state.list = action.payload
+			state.filtered = action.payload
+			state.order = defaultOrder
+			state.currentPage = 1
+			state.detail = {}
+			state.loading = false
 		},
 		clearDogs() {
 			return {
@@ -144,7 +144,7 @@ export const getBySource = (source) => {
 			dispatch(applyOrder())
 			dispatch(setStatus(""))
 		} catch (error) {
-			console.error("getByTemperament:", error.message)
+			console.error("getBySource:", error.message)
 			dispatch(setStatus(error.message))
 		}
 	}
@@ -171,7 +171,6 @@ export const fetchAllDogs = () => {
 			dispatch(setLoading(true))
 			const { data } = await axios.get("/dogs")
 			dispatch(setAllDogs(data))
-			dispatch(setSearchName(""))
 		} catch (error) {
 			console.error("fetchAllDogs:", error)
 			dispatch(setStatus(error.message))
@@ -183,10 +182,14 @@ export const searchByName = (name) => {
 	return async (dispatch) => {
 		try {
 			dispatch(setLoading(true))
+			dispatch(setSearchName(name))
 			const { data } = await axios.get(`/dogs?name=${name}`)
 			dispatch(setAllDogs(data))
-			dispatch(setSearchName(name))
-			dispatch(applyFilters(data))
+			if (data.length) {
+				dispatch(applyFilters(data))
+			} else {
+				dispatch(setStatus("NOTFOUND"))
+			}
 		} catch (error) {
 			console.error("searchByName: ", error.message)
 			dispatch(setStatus(error.message))
@@ -199,7 +202,11 @@ export const searchById = (id) => {
 		try {
 			dispatch(setLoading(true))
 			const { data } = await axios.get(`/dogs/${id}`)
-			dispatch(setDetail(data))
+			if (data) {
+				dispatch(setDetail(data))
+			} else {
+				dispatch(setStatus("NOTFOUND"))
+			}
 		} catch (error) {
 			console.error("searchById:", error.message)
 			dispatch(setStatus(error.response ? error.response.data : error.message))
@@ -213,6 +220,8 @@ export const postNewBreed = (formData) => {
 			const { data: dogCreated } = await axios.post("/dogs", formData)
 			const { data } = await axios.get("/dogs")
 			dispatch(setAllDogs(data))
+			dispatch(applyFilters())
+			dispatch(applyOrder())
 			dispatch(setStatus("OK"))
 			return dogCreated
 		} catch (error) {
@@ -228,18 +237,20 @@ export const postNewBreed = (formData) => {
 	}
 }
 // delete from database
-// export const deleteBreed = (id) => {
-// 	return async (dispatch) => {
-// 		try {
-// 			const { data } = await axios.delete(/dogs/${id}`)
-//
-//             await dispatch(setStatus('OK'))
-//         } catch (error) {
-//             dispatch(setStatus(error.message))
-// 			    console.error("deleteBreed:", error.message)
-// 		}
-// 	}
-// }
+export const deleteBreed = (id) => {
+	return async (dispatch) => {
+		try {
+			await axios.delete(`/dogs/${id}`)
+			dispatch(setStatus("OK"))
+			const { data } = await axios.get("/dogs")
+			dispatch(setAllDogs(data))
+			dispatch(applyFilters())
+		} catch (error) {
+			dispatch(setStatus(error.message))
+			console.error("deleteBreed:", error.message)
+		}
+	}
+}
 
 export const {
 	setLoading,

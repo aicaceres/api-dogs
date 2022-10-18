@@ -13,7 +13,7 @@ const server = Router()
 server.get("/", async (req, res, next) => {
 	try {
 		const { name } = req.query
-		const dogsData = await getAllData(name)
+        const dogsData = await getAllData(name)
 		res.status(200).send(dogsData)
 	} catch (error) {
 		res.status(400).send(error.message)
@@ -24,7 +24,7 @@ server.get("/", async (req, res, next) => {
 server.get("/:idRaza", async (req, res) => {
 	try {
 		const { idRaza } = req.params
-		const dogsData = await getByIdRaza(idRaza)
+        const dogsData = await getByIdRaza(idRaza)
 		res.status(200).send(dogsData)
 	} catch (error) {
 		res.status(400).send(error.message)
@@ -49,9 +49,8 @@ server.post("/", async (req, res) => {
 server.delete("/:id", async (req, res) => {
 	try {
 		const { id } = req.params
-        const response = await deleteDbBreed(id)
-        if(response)
-		    res.status(200).send(response)
+        await deleteDbBreed(id)
+        res.sendStatus(200)
 	} catch (error) {
 		res.status(400).send(error.message)
 	}

@@ -5,7 +5,7 @@ export default function EmptyData() {
 		<Empty>
 			<h3>There're no breeds with this criteria... </h3>
 			<h2>Create your own!</h2>
-			<img alt='looking...' src='/assets/loading-smell.gif' />
+			<img alt='looking...' src='/assets/emptydata.gif' />
 		</Empty>
 	)
 }

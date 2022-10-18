@@ -2,7 +2,7 @@
 
 # Individual Project - Henry Dogs
 
-<img height="200" src="./dog.png" />
+<img height="150" src="./client/public/assets/logo.png" />
 
 ## Objetivos del Proyecto
 

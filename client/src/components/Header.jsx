@@ -20,7 +20,7 @@ export default function Header() {
 	}
 
 	return (
-		<HeaderContainer>
+		<Container>
 			<div>
 				<h1>
 					DOGS
@@ -90,12 +90,12 @@ export default function Header() {
 					<span>Weight</span>
 				</button>
 			</div>
-		</HeaderContainer>
+		</Container>
 	)
 }
 
 // Styled component
-const HeaderContainer = styled.div`
+const Container = styled.div`
 	width: 90%;
 	display: flex;
 	flex-wrap: wrap;

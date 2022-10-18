@@ -4,6 +4,7 @@ import Item from "./Item"
 import Loading from "./Loading"
 import EmptyData from './EmptyData'
 import ErrorMessage from './ErrorMessage'
+
 // redux
 import { fetchAllDogs, setCurrentPage } from "../redux/dogSlice"
 import { useDispatch, useSelector } from "react-redux"
@@ -26,9 +27,9 @@ export default function Items() {
 	const lastIdx = firstIdx + countPerPage
 	const page = dogs.slice(firstIdx, lastIdx)
 
-	useEffect(() => {
+    useEffect(() => {
         if (!list.length && !searchName) {
-			dispatch(fetchAllDogs())
+            dispatch(fetchAllDogs())
         }
 	}, [dispatch, list, searchName])
 
@@ -42,7 +43,7 @@ export default function Items() {
 				{loading ? (
 					<Loading />
 				) : !dogs.length ? (
-                    status ? <ErrorMessage msg={status} /> : <EmptyData />
+                    status ? (status==='NOTFOUND' ? <EmptyData /> : <ErrorMessage msg={status} />) : <EmptyData />
 				) : (
 					<>
 						{page.map((dog) => (

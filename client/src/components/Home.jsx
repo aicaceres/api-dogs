@@ -2,6 +2,7 @@ import React from "react"
 import NavBar from "./NavBar"
 import Items from "./Items"
 import Header from "./Header"
+import Footer from "./Footer"
 import styled from "styled-components"
 
 export default function Home() {
@@ -13,6 +14,8 @@ export default function Home() {
 				<Header />
 				<Items />
 			</Layout>
+
+			<Footer />
 		</>
 	)
 }

@@ -6,7 +6,7 @@ export default function Logo() {
 	return (
 		<Container>
 			<a href='/breeds'>
-				<img alt='.' src='/assets/logotemp.png' />
+				<img alt='.' src='/assets/logo.png' />
 				<span>Breeds</span>
             </a>
 		</Container>
