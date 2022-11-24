@@ -33,7 +33,10 @@ The all project had an execution time of 20 days. Starting with a boilerplate wi
 - Frontend: **_React, Redux Toolkit, React Router, Styled Components_**
 - Backend: **_nodeJS, ExpressJS, Sequelize, PostgreSQL, Axios_**
 
-## 🔗 Demo https://lnkd.in/d64U5fZR
+## 🔗 Demo: 
+[breeds-app.vercel.app](https://breeds-app.vercel.app) 
+
+## Screenshots
 
 | Landing      | Homepage |
 | ----------- | ----------- |
